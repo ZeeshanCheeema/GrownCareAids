@@ -133,15 +133,13 @@ export const apiSlice = createApi({
       invalidatesTags: ['Campaign'],
     }),
     uploadImage: builder.mutation({
-      query: () => ({
-        url: '/uploadImage',
+      query: imageData => ({
+        url: '/uploadImage', // Ensure this matches your backend API endpoint
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        body: imageData,
       }),
-      invalidatesTags: ['Campaign'],
     }),
+
     deleteCampaign: builder.mutation({
       query: id => ({
         url: `/deleteCampaign/${id}`,
@@ -151,10 +149,10 @@ export const apiSlice = createApi({
     }),
 
     updateCampaign: builder.mutation({
-      query: ({...userProfile}) => ({
-        url: `/updateCampaign`,
+      query: ({id, ...newCampaign}) => ({
+        url: `/updateCampaign/${id}`, // Send ID in URL
         method: 'PATCH',
-        body: userProfile,
+        body: newCampaign, // Send rest of the data in the body
       }),
       invalidatesTags: ['Campaign'],
     }),
@@ -192,7 +190,7 @@ export const apiSlice = createApi({
 
     userProfile: builder.query({
       query: () => '/getUserProfile',
-      providesTags: ['Post'],
+      providesTags: ['User'],
     }),
 
     editProfile: builder.mutation({
@@ -201,7 +199,7 @@ export const apiSlice = createApi({
         method: 'PATCH',
         body: data,
       }),
-      invalidatesTags: ['Post'],
+      invalidatesTags: ['User'],
     }),
   }),
 });

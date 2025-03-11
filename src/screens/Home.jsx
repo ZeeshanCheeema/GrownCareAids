@@ -20,6 +20,7 @@ import {
   useGetUserNotificationsQuery,
   useGetAllCampaignsQuery,
   apiSlice,
+  useUserProfileQuery,
 } from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
 
@@ -33,17 +34,21 @@ const Home = () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [images, setImages] = useState({});
-
+  const {data: userProfile} = useUserProfileQuery();
+  const [profileImage, setProfileImage] = useState(null);
+  useEffect(() => {
+    if (userProfile?.data?.profileImage) {
+      setProfileImage(userProfile.data.profileImage);
+    }
+  }, [userProfile]);
   // Fetch notifications
   const {data: notification, isLoading: notifLoading} =
     useGetUserNotificationsQuery();
   const notifications = notification?.data || [];
   const notificationCount = notifications.length;
 
-  // Fetch all campaigns (for both default display and search)
   const {data, isLoading, error} = useGetAllCampaignsQuery();
 
-  // Function to fetch campaign images using RTK Query's initiate method
   const fetchCampaignImages = async campaigns => {
     if (!campaigns || !campaigns.length) return;
     const imagePromises = campaigns.map(async campaign => {
@@ -104,7 +109,9 @@ const Home = () => {
         {/* Profile Icon */}
         <TouchableOpacity onPress={() => navigation.navigate('MyProfile')}>
           <Image
-            source={require('../assets/user.png')}
+            source={
+              profileImage ? {uri: profileImage} : require('../assets/user.png')
+            }
             style={styles.userImg}
           />
         </TouchableOpacity>
@@ -281,10 +288,11 @@ const styles = StyleSheet.create({
   },
   headerTop: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     alignItems: 'center',
+    width: '100%',
   },
-  notificationContainer: {position: 'relative', left: 270},
+  notificationContainer: {position: 'relative', marginRight: 20},
   badge: {
     position: 'absolute',
     top: -6,
@@ -383,7 +391,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     overflow: 'hidden',
   },
-  campaignImage: {width: 120, height: 120, borderRadius: 10},
+  campaignImage: {width: 120, borderRadius: 10},
   campaignDetails: {flex: 1, marginLeft: 10},
   campaignTitle: {fontSize: 14, fontWeight: 'bold', marginVertical: 5},
   progressBar: {

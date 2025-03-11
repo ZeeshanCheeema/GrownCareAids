@@ -25,6 +25,7 @@ const MyCampaignEdit = () => {
 
   const [deleteCampaign] = useDeleteCampaignMutation();
   const [showFullDescription, setShowFullDescription] = useState(false);
+
   const handleDelete = () => {
     Alert.alert(
       'Confirm Deletion',
@@ -35,10 +36,16 @@ const MyCampaignEdit = () => {
           text: 'Delete',
           onPress: async () => {
             try {
-              await deleteCampaign(item._id).unwrap();
-              Alert.alert('Success', 'Campaign deleted successfully.');
+              const response = await deleteCampaign(item._id).unwrap();
+              console.log('Delete Response:', response);
+
+              Alert.alert(
+                'Success',
+                response?.message || 'Campaign deleted successfully.',
+              );
               navigation.goBack();
             } catch (error) {
+              console.log('Delete Error:', error);
               Alert.alert(
                 'Error',
                 error?.data?.message || 'Failed to delete campaign',
@@ -50,6 +57,7 @@ const MyCampaignEdit = () => {
       ],
     );
   };
+
   return (
     <View style={styles.container}>
       {/* Header with Back Button */}
@@ -68,7 +76,12 @@ const MyCampaignEdit = () => {
 
         {/* Campaign Image */}
         <Image
-          source={image ? {uri: image} : ''}
+          source={{
+            uri:
+              image[item._id] ||
+              (item.images && item.images[0]) ||
+              'https://via.placeholder.com/150',
+          }}
           style={styles.campaignImage}
         />
       </View>
@@ -128,14 +141,8 @@ const MyCampaignEdit = () => {
             onPress={() =>
               navigation.navigate('FundraiserDetails', {
                 id: item._id,
-                images,
-                title: item.title,
-                totalFundraise: item.amount,
-                location: item.location,
-                description: item.description,
-                donationTarget: item.raisedAmount,
-                category: item.category,
-                duration: item.duration,
+                image: [],
+                item,
               })
             }>
             <Text style={styles.editText}>Edit</Text>

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   Text,
@@ -13,12 +13,15 @@ import {useNavigation} from '@react-navigation/native';
 import {useGetAllCampaignsQuery, apiSlice} from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
 
-const TopCampaigns = ({searchQuery}) => {
+const placeholderImage = 'https://via.placeholder.com/150';
+
+const TopCampaigns = ({searchQuery = ''}) => {
   const navigation = useNavigation();
   const {width, height} = useWindowDimensions();
   const {data, isLoading, error} = useGetAllCampaignsQuery();
-  const [images, setImages] = useState({});
   const dispatch = useDispatch();
+
+  const [images, setImages] = useState({});
 
   const fetchCampaignImages = async campaigns => {
     if (!campaigns || !campaigns.length) return;
@@ -31,13 +34,11 @@ const TopCampaigns = ({searchQuery}) => {
         const result = await dispatch(
           apiSlice.endpoints.getImage.initiate(fund.images[0]),
         ).unwrap();
-
         return {id: fund._id, imageUrl: result.data};
       } catch (error) {
         return {id: fund._id, imageUrl: null};
       }
     });
-
     const imageResults = await Promise.all(imagePromises);
     const imageMap = imageResults.reduce((acc, {id, imageUrl}) => {
       acc[id] = imageUrl;
@@ -49,10 +50,9 @@ const TopCampaigns = ({searchQuery}) => {
 
   useEffect(() => {
     if (data?.data) {
-      console.log('Fetched Campaign Data:', data.data);
       fetchCampaignImages(data.data);
     }
-  }, [data]);
+  }, [data, fetchCampaignImages]);
 
   if (isLoading) {
     return (
@@ -61,50 +61,63 @@ const TopCampaigns = ({searchQuery}) => {
   }
 
   if (error) {
-    return <Text style={styles.error}>Failed to load campaigns</Text>;
+    return (
+      <Text style={styles.error}>
+        ⚠️ Failed to load campaigns. Please try again later.
+      </Text>
+    );
   }
 
-  const filteredCampaigns = data?.data?.filter(item =>
-    item.title.toLowerCase().includes(searchQuery.toLowerCase()),
-  );
+  const filteredCampaigns =
+    data?.data?.filter(item =>
+      item?.title?.toLowerCase().includes(searchQuery.toLowerCase()),
+    ) || [];
 
   const renderItem = ({item}) => {
     if (!item) return null;
 
     const progress =
       item.amount > 0 ? (item.raisedAmount / item.amount) * 100 : 0;
-    const imageUrl = images[item._id] || 'https://via.placeholder.com/150'; // Fallback image
+    const imageUrl = images[item._id] || placeholderImage;
 
     return (
       <View style={[styles.card, {width: width * 0.6}]}>
         <Image
-          source={{uri: imageUrl}}
+          source={{
+            uri:
+              images[item._id] ||
+              (item.images && item.images[0]) ||
+              'https://via.placeholder.com/150',
+          }}
           style={[styles.image, {height: height * 0.15}]}
         />
+
         <View style={styles.content}>
           <Text style={[styles.title, {fontSize: width * 0.04}]}>
             {item.title || 'No Title'}
           </Text>
-          <Text style={styles.percentage}>{progress}%</Text>
+          <Text style={styles.percentage}>{progress.toFixed(1)}%</Text>
+
           <View style={styles.progressBarContainer}>
-            <View style={styles.progressBarFill(progress)} />
+            <View style={[styles.progressBarFill, {width: `${progress}%`}]} />
           </View>
         </View>
 
         <View style={styles.detailsRow}>
           <View>
             <Text style={styles.label}>
-              Raised :${item.raisedAmount?.toLocaleString() || '0'}
+              Raised: ${item.raisedAmount?.toLocaleString() || '0'}
             </Text>
-            <Text style={styles.label}>{item.category.name}</Text>
+            <Text style={styles.label}>{item.category?.name || 'N/A'}</Text>
           </View>
           <View>
             <Text style={styles.label}>
-              Target:${item.amount?.toLocaleString() || '0'}
+              Target: ${item.amount?.toLocaleString() || '0'}
             </Text>
-            <Text style={styles.label}>{item.location}</Text>
+            <Text style={styles.label}>{item.location || 'Unknown'}</Text>
           </View>
         </View>
+
         <TouchableOpacity
           style={[styles.button, {paddingVertical: height * 0.015}]}
           onPress={() =>
@@ -124,15 +137,12 @@ const TopCampaigns = ({searchQuery}) => {
 
   return (
     <FlatList
-      data={filteredCampaigns || []}
+      data={filteredCampaigns}
       horizontal
       keyExtractor={item => item?._id?.toString() || ''}
       renderItem={renderItem}
       showsHorizontalScrollIndicator={false}
-      contentContainerStyle={{
-        paddingHorizontal: width * 0.03,
-        paddingVertical: height * 0.02,
-      }}
+      contentContainerStyle={styles.listContainer}
       ListEmptyComponent={
         <Text style={styles.noResults}>No campaigns found</Text>
       }
@@ -141,6 +151,10 @@ const TopCampaigns = ({searchQuery}) => {
 };
 
 const styles = StyleSheet.create({
+  listContainer: {
+    paddingHorizontal: 15,
+    paddingVertical: 20,
+  },
   card: {
     backgroundColor: '#fff',
     borderRadius: 12,
@@ -173,22 +187,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#e0e0e0',
     borderRadius: 10,
     marginTop: 8,
-    overflow: 'hidden', // Ensures the fill stays within bounds
+    overflow: 'hidden',
   },
-  progressBarFill: progress => ({
-    width: `${progress}%`, // Dynamic width
+  progressBarFill: {
     height: '100%',
     backgroundColor: '#1A3F1E',
     borderRadius: 10,
-  }),
+  },
   percentage: {
     fontSize: 12,
     fontWeight: '500',
     color: '#1A3F1E',
     marginTop: 5,
-    alignSelf: 'flex-end', // Proper alignment
+    alignSelf: 'flex-end',
   },
-
   detailsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -199,26 +211,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#777',
   },
-  value: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#1A3F1E',
-  },
   button: {
     backgroundColor: '#1A3F1E',
     borderRadius: 8,
     alignItems: 'center',
+    justifyContent: 'center',
     marginHorizontal: 12,
     marginTop: 12,
-    width: 140,
-    height: 40,
-    left: 35,
+    width: '80%',
+    alignSelf: 'center',
   },
   buttonText: {
     color: '#fff',
-    fontWeight: '400',
-    fontSize: 14,
-    lineHeight: 21,
+    fontWeight: '500',
   },
   loader: {
     marginTop: 20,
@@ -227,6 +232,7 @@ const styles = StyleSheet.create({
     color: 'red',
     textAlign: 'center',
     marginTop: 20,
+    fontSize: 16,
   },
   noResults: {
     textAlign: 'center',

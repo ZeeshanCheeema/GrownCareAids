@@ -25,65 +25,55 @@ const ReviewScreen = ({route}) => {
   const [createCampaign, {isLoading, error}] = useCreateCampaignMutation();
   const [updateCampaign, {isLoading: isUpdating}] = useUpdateCampaignMutation();
 
+  // Extract data from route params
+  const {id, item = {}} = route.params || {};
   const {
-    id,
-    title,
-    category,
-    location,
-    amount,
+    title = '',
+    category = item?.category || {},
+    location = '',
+    amount = '',
     duration = [],
-    description,
-    donationTarget,
-    raisedAmount,
+    description = '',
     images = [],
-  } = route.params || {};
+  } = item || {};
 
-  // Destructure duration safely
-  const [startDate, endDate] = duration;
-  const formattedDuration = `${startDate} to ${endDate}`;
+  // Ensure category is properly formatted
+  const categoryId = category?._id || null;
+  const categoryName = category?.name || 'N/A';
 
+  const [startDate, endDate] = duration || [];
+  const formattedDuration =
+    startDate && endDate
+      ? `${new Date(startDate).toDateString()} to ${new Date(
+          endDate,
+        ).toDateString()}`
+      : 'N/A';
+
+  // Function to handle create/update campaign
   const handleSaveCampaign = async () => {
     try {
+      const campaignData = {
+        title,
+        category: categoryId,
+        location,
+        amount,
+        duration: [startDate, endDate],
+        description,
+        images: [],
+      };
+
+      let response;
       if (id) {
-        const response = await updateCampaign({
-          id,
-          title,
-          category,
-          location,
-          amount,
-          duration: [startDate, endDate],
-          description,
-          donationTarget,
-          raisedAmount,
-          images,
-        }).unwrap();
-        console.log('Campaign Updated:', response);
-        if (response.status === 200) {
-          alert('suucess', response?.message);
-          navigation.navigate('bottomTab');
-        } else {
-          alert('Error', response?.error?.data?.message);
-        }
-        alert('Campaign updated successfully!');
+        response = await updateCampaign({id, ...campaignData}).unwrap();
       } else {
-        const response = await createCampaign({
-          title,
-          category,
-          location,
-          amount,
-          duration: [startDate, endDate],
-          description,
-          donationTarget,
-          raisedAmount,
-          images,
-        }).unwrap();
-        console.log('Campaign Created:', response);
-        if (response.status === 200) {
-          alert('suucess', response?.message);
-          navigation.navigate('MyCampaign');
-        } else {
-          alert('Error', response?.error?.data?.message);
-        }
+        response = await createCampaign(campaignData).unwrap();
+      }
+
+      if (response.status === 200) {
+        alert('Success', response?.message);
+        navigation.navigate('BottomTab');
+      } else {
+        alert('Error', response?.message);
       }
     } catch (err) {
       console.error('Error saving campaign:', err);
@@ -115,8 +105,8 @@ const ReviewScreen = ({route}) => {
       </View>
 
       {/* Fundraiser Details */}
+      <Text style={styles.sectionTitle}>Fundraiser Details</Text>
       <View style={styles.detailBox}>
-        <Text style={styles.sectionTitle}>Fundraiser Details</Text>
         <View style={styles.row}>
           <View style={styles.labelColumn}>
             <Text style={styles.label}>Title</Text>
@@ -124,27 +114,28 @@ const ReviewScreen = ({route}) => {
             <Text style={styles.label}>Location</Text>
           </View>
           <View style={styles.valueColumn}>
-            <Text style={styles.value}>{title}</Text>
-            <Text style={styles.value}>{category}</Text>
-            <Text style={styles.value}>{location}</Text>
+            <Text style={styles.value}>{title || 'N/A'}</Text>
+            <Text style={styles.value}>{categoryName}</Text>
+            <Text style={styles.value}>{location || 'N/A'}</Text>
           </View>
         </View>
       </View>
 
       {/* Amount Details */}
+      <Text style={styles.sectionTitle}>Amount Details</Text>
       <View style={styles.detailBox}>
-        <Text style={styles.sectionTitle}>Amount Details</Text>
         <View style={styles.row}>
           <View style={styles.labelColumn}>
             <Text style={styles.label}>Amount</Text>
             <Text style={styles.label}>Duration</Text>
           </View>
           <View style={styles.valueColumn}>
-            <Text style={styles.value}>{amount}</Text>
+            <Text style={styles.value}>{amount ? `$${amount}` : 'N/A'}</Text>
             <Text style={styles.value}>{formattedDuration}</Text>
           </View>
         </View>
 
+        {/* Attached Images */}
         <View style={styles.imageSection}>
           <Text style={styles.subTitle}>Attached Images</Text>
           <View style={styles.imagePlaceholder}>
@@ -166,9 +157,11 @@ const ReviewScreen = ({route}) => {
       </View>
 
       {/* Description */}
+      <Text style={styles.sectionTitle}>Description</Text>
       <View style={styles.detailBox}>
-        <Text style={styles.sectionTitle}>Description</Text>
-        <Text style={styles.descriptionText}>{description}</Text>
+        <Text style={styles.descriptionText}>
+          {description || 'No description provided.'}
+        </Text>
       </View>
 
       {/* Buttons */}
@@ -176,7 +169,7 @@ const ReviewScreen = ({route}) => {
         <TouchableOpacity
           style={styles.backButtonStyle}
           onPress={() => navigation.goBack()}>
-          <Text style={styles.backButtonText}>Back</Text>
+          <Text style={styles.ButtonText}>Back</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[
@@ -198,27 +191,22 @@ const ReviewScreen = ({route}) => {
   );
 };
 
+// Styles
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9F9F9',
-  },
+  container: {flex: 1, backgroundColor: '#F9F9F9'},
   headerTop: {
     backgroundColor: '#EA7E24',
-    height: height * 0.12,
-    borderBottomRightRadius: width * 0.05,
-    borderBottomLeftRadius: width * 0.05,
+    height: height * 0.15,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     position: 'relative',
   },
-  backButton: {
-    position: 'absolute',
-    left: width * 0.05,
-  },
+  backButton: {position: 'absolute', left: 15, top: 20},
   headerTitle: {
-    fontSize: width * 0.05,
+    fontSize: 22,
     fontWeight: 'bold',
     color: 'white',
   },
@@ -226,138 +214,78 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: height * 0.02,
-    marginHorizontal: width * 0.05,
+    marginVertical: 25,
+  },
+  completedLine: {
+    width: width * 0.3,
+    height: 3,
+    backgroundColor: '#D3D3D3',
   },
   step: {
-    width: width * 0.08,
-    height: width * 0.08,
-    borderRadius: width * 0.04,
+    width: 30,
+    height: 30,
+    borderRadius: 15,
     backgroundColor: '#D3D3D3',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  activeStep: {
-    backgroundColor: '#EA7E24',
-  },
-  completedLine: {
-    flex: 1,
-    height: 3,
-    backgroundColor: '#28A745',
-    marginHorizontal: width * 0.02,
-  },
-  stepText: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
+  activeStep: {backgroundColor: '#EA7E24'},
+  stepText: {color: '#fff', fontWeight: 'bold'},
   detailBox: {
     backgroundColor: '#fff',
-    borderRadius: width * 0.03,
-    padding: 10,
-    marginHorizontal: width * 0.05,
-    marginBottom: height * 0.02,
-    elevation: 2,
+    padding: 15,
+    margin: 20,
+    borderRadius: 10,
+    borderWidth: 0.5,
   },
   sectionTitle: {
-    fontSize: width * 0.045,
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: height * 0.015,
-    marginVertical: 10,
+
+    paddingLeft: 20,
   },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: height * 0.015,
-  },
-  labelColumn: {
-    flex: 1,
-    paddingRight: 10,
-  },
-  valueColumn: {
-    flex: 1,
-    paddingLeft: 10,
-  },
+  row: {flexDirection: 'row', marginHorizontal: 30},
+  labelColumn: {flex: 1},
+  valueColumn: {flex: 1},
   label: {
-    fontSize: width * 0.04,
-    color: '#555',
-    marginBottom: height * 0.005,
+    color: '#858585',
+    fontWeight: 'bold',
+    marginBottom: 15,
   },
-  value: {
-    fontSize: width * 0.04,
-    color: '#333',
-    marginBottom: height * 0.005,
-  },
-  imageSection: {
-    marginTop: height * 0.02,
-  },
-  subTitle: {
-    fontSize: width * 0.04,
-    fontWeight: '600',
-    marginBottom: height * 0.01,
-  },
-  imagePlaceholder: {
-    borderRadius: width * 0.01,
-    backgroundColor: '#EAEAEA',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: height * 0.015,
-  },
-  imagePlaceholderText: {
-    color: '#888',
-    fontSize: width * 0.04,
-  },
+  value: {color: '#000', marginBottom: 15},
   selectedImage: {
-    width: width * 0.12,
-    height: height * 0.05,
-    borderRadius: width * 0.03,
-    marginRight: 10,
-  },
-  descriptionText: {
-    fontSize: width * 0.04,
-    color: '#333',
-    lineHeight: 22,
+    width: 50,
+    height: 50,
+    borderRadius: 8,
+    marginLeft: 5,
+    overflow: 'hidden',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginHorizontal: width * 0.05,
-    marginTop: height * 0.04,
-    marginBottom: height * 0.05,
+    margin: 20,
+    marginBottom: 40,
   },
   backButtonStyle: {
-    backgroundColor: '#E0E0E0',
-    paddingVertical: width * 0.03,
-    paddingHorizontal: width * 0.07,
-    borderRadius: width * 0.03,
+    borderColor: '#EA7E24',
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    width: 160,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  backButtonText: {
-    color: '#333',
-    fontSize: width * 0.04,
-    fontWeight: 'bold',
-  },
+
   createButton: {
     backgroundColor: '#EA7E24',
-    paddingVertical: width * 0.03,
-    paddingHorizontal: width * 0.07,
-    borderRadius: width * 0.03,
-    shadowColor: '#EA7E24',
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
+    padding: 12,
+    borderRadius: 8,
+    width: 160,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  disabledButton: {
-    backgroundColor: '#b0b0b0',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: width * 0.04,
-    fontWeight: 'bold',
-  },
-  errorText: {
-    color: 'red',
-    textAlign: 'center',
-    marginTop: height * 0.01,
-  },
+  buttonText: {color: '#fff', fontWeight: 'bold'},
+  disabledButton: {opacity: 0.6},
 });
 
 export default ReviewScreen;

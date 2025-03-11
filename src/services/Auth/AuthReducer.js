@@ -6,7 +6,6 @@ const authSlice = createSlice({
   initialState: {
     user: null,
     token: null,
-    fcmToken: null,
     isAuthenticated: false,
   },
   reducers: {
@@ -17,19 +16,11 @@ const authSlice = createSlice({
 
       // Store Access Token
       AsyncStorage.setItem('accessToken', action.payload.token);
-
-      // Store FCM Token if it exists
-
-      AsyncStorage.setItem('fcmToken', action.payload.fcmToken);
     },
     logout: state => {
       state.user = null;
       state.token = null;
-      state.fcmToken = null;
       state.isAuthenticated = false;
-
-      // Remove tokens from storage
-      AsyncStorage.removeItem('fcmToken');
       AsyncStorage.removeItem('accessToken');
     },
   },

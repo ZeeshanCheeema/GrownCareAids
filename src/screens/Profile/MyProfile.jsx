@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   View,
   Text,
@@ -108,7 +108,7 @@ const MyProfile = () => {
       {/* About Me Section */}
       <View style={styles.aboutContainer}>
         <Text style={styles.sectionTitle}>About Me</Text>
-        <Text style={styles.aboutText}>{userProfile?.bio}</Text>
+        <Text style={styles.aboutText}>{userProfile?.aboutMe}</Text>
       </View>
 
       {/* Contribution Section */}

@@ -14,7 +14,11 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useGetAllCampaignsQuery, apiSlice} from '../services/Auth/AuthApi';
+import {
+  useGetAllCampaignsQuery,
+  apiSlice,
+  useUserProfileQuery,
+} from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
 
 const {width} = Dimensions.get('window');
@@ -25,6 +29,16 @@ const Search = () => {
   const [images, setImages] = useState({});
   const navigation = useNavigation();
   const dispatch = useDispatch();
+
+  // Fetch user profile
+  const {data: userProfile} = useUserProfileQuery();
+  const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    if (userProfile?.data?.profileImage) {
+      setProfileImage(userProfile.data.profileImage);
+    }
+  }, [userProfile]);
 
   const {data, isLoading, error} = useGetAllCampaignsQuery();
 
@@ -41,7 +55,6 @@ const Search = () => {
         ).unwrap();
         return {id: fund._id, imageUrl: result.data};
       } catch (error) {
-        // If fetching fails, silently return null to use fallback image.
         return {id: fund._id, imageUrl: null};
       }
     });
@@ -73,7 +86,6 @@ const Search = () => {
     }
   }, [data]);
 
-  // Example progress calculation – adjust as needed.
   const donationTarget = data?.data?.raisedAmount || 0;
   const totalFundraise = data?.data?.amount || 0;
   const progress =
@@ -91,10 +103,17 @@ const Search = () => {
         <View style={styles.header}>
           <View style={styles.headerTop}>
             <Image source={require('../assets/logoSmall.png')} />
-            <Image
-              source={require('../assets/user.png')}
-              style={styles.userImg}
-            />
+            {/* Profile Image */}
+            <TouchableOpacity onPress={() => navigation.navigate('MyProfile')}>
+              <Image
+                source={
+                  profileImage
+                    ? {uri: profileImage}
+                    : require('../assets/user.png')
+                }
+                style={styles.userImg}
+              />
+            </TouchableOpacity>
           </View>
 
           {/* Search Bar */}

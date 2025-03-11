@@ -19,27 +19,14 @@ const FundraiserDetails = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const {data, isLoading, error} = useGetCategoriesQuery();
-  console.log(data);
 
-  const {
-    id = null,
-    title: initialTitle = '',
-    category: initialCategory = '',
-    location: initialLocation = '',
-    city: initialCity = '',
-    description = '',
-    donationTarget = '',
-    images = [],
-    amount = '',
-    duration,
-    totalFundraise,
-  } = route.params || {};
+  const {id = null, item = {}, image = []} = route.params || {};
 
   // Form states (pre-filled for editing)
-  const [title, setTitle] = useState(initialTitle);
-  const [category, setCategory] = useState(initialCategory);
-  const [location, setLocation] = useState(initialLocation);
-  const [city, setCity] = useState(initialCity);
+  const [title, setTitle] = useState(item.title || '');
+  const [category, setCategory] = useState(item.Category || '');
+  const [location, setLocation] = useState(item.location || '');
+  const [city, setCity] = useState(item.city || '');
 
   // Form validation
   const validateForm = () => {
@@ -133,16 +120,14 @@ const FundraiserDetails = () => {
             if (validateForm()) {
               navigation.navigate('AmountDetails', {
                 id,
-                title,
-                city,
-                images,
-                location,
-                description,
-                donationTarget,
-                category,
-                amount,
-                duration,
-                totalFundraise,
+                item: {
+                  title,
+                  category:
+                    data?.data?.find(cat => cat._id === category) || null,
+                  location,
+                  city,
+                },
+                image: [],
               });
             }
           }}>
@@ -210,7 +195,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginBottom: 12,
   },
-  picker: {height: 53, width: 350},
+  picker: {height: 53, width: 350, color: '#000'},
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',

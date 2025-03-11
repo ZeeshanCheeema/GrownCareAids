@@ -13,7 +13,11 @@ import {
   Keyboard,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useGetAuthUserCampaignQuery, apiSlice} from '../services/Auth/AuthApi';
+import {
+  useGetAuthUserCampaignQuery,
+  apiSlice,
+  useUserProfileQuery,
+} from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
 
 const {width} = Dimensions.get('window');
@@ -22,18 +26,25 @@ const Mycampaign = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const {data, isLoading, error} = useGetAuthUserCampaignQuery();
+  const {data: userProfile} = useUserProfileQuery();
 
   const [searchText, setSearchText] = useState('');
   const [selectedTab, setSelectedTab] = useState('Active');
   const [filteredCampaigns, setFilteredCampaigns] = useState([]);
   const [images, setImages] = useState({});
-  console.log('images', images);
+  const [profileImage, setProfileImage] = useState(null);
+
+  useEffect(() => {
+    if (userProfile?.data?.profileImage) {
+      setProfileImage(userProfile.data.profileImage);
+    }
+  }, [userProfile]);
 
   const fetchCampaignImages = async campaigns => {
-    if (!campaigns || !campaigns.length) return;
+    if (!campaigns || campaigns.length === 0) return;
 
     const imagePromises = campaigns.map(async fund => {
-      if (!fund.images || !fund.images.length)
+      if (!fund.images || fund.images.length === 0)
         return {id: fund._id, imageUrl: null};
 
       try {
@@ -45,6 +56,7 @@ const Mycampaign = () => {
         return {id: fund._id, imageUrl: null};
       }
     });
+
     const imageResults = await Promise.all(imagePromises);
     const imageMap = imageResults.reduce((acc, {id, imageUrl}) => {
       acc[id] = imageUrl;
@@ -56,20 +68,9 @@ const Mycampaign = () => {
 
   useEffect(() => {
     if (data?.data) {
-      let filtered = data.data;
-      if (selectedTab === 'Active') {
-        filtered = data.data.filter(
-          item => item.status.toLowerCase() === 'approved',
-        );
-      } else if (selectedTab === 'Pending') {
-        filtered = data.data.filter(
-          item => item.status.toLowerCase() === 'pending',
-        );
-      } else if (selectedTab === 'Complete') {
-        filtered = data.data.filter(
-          item => item.status.toLowerCase() === 'completed',
-        );
-      }
+      let filtered = data.data.filter(
+        item => item.status.toLowerCase() === selectedTab.toLowerCase(),
+      );
       setFilteredCampaigns(filtered);
       fetchCampaignImages(data.data);
     }
@@ -78,12 +79,10 @@ const Mycampaign = () => {
   const handleSearch = text => {
     setSearchText(text);
     if (!text.trim()) {
-      // When search text is cleared, show campaigns by selected tab
       const reset = data?.data?.filter(
         item => item.status.toLowerCase() === selectedTab.toLowerCase(),
       );
-      setFilteredCampaigns(reset || '' || []);
-
+      setFilteredCampaigns(reset || []);
       return;
     }
     const filtered = filteredCampaigns.filter(item =>
@@ -91,11 +90,7 @@ const Mycampaign = () => {
     );
     setFilteredCampaigns(filtered);
   };
-  useEffect(() => {
-    if (data?.data) {
-      fetchCampaignImages(data.data);
-    }
-  }, [data]);
+
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -123,7 +118,9 @@ const Mycampaign = () => {
           <View style={styles.headerTop}>
             <Image source={require('../assets/logoSmall.png')} />
             <Image
-              source={require('../assets/user.png')}
+              source={{
+                uri: profileImage || 'https://via.placeholder.com/150',
+              }}
               style={styles.userImg}
             />
           </View>
@@ -170,61 +167,57 @@ const Mycampaign = () => {
         {/* Campaign List */}
         <View style={styles.content}>
           {filteredCampaigns?.length > 0 ? (
-            filteredCampaigns.map(item => {
-              return (
-                <TouchableOpacity
-                  key={item._id}
-                  onPress={() =>
-                    navigation.navigate('myCampaignEdit', {
-                      item,
-                      image:
-                        images[item._id] ||
-                        (item.images && item.images[0]) ||
-                        '',
-                      id: item._id,
-                    })
-                  }
-                  style={styles.campaignCard}>
-                  <Image
-                    source={{
-                      uri:
-                        images[item._id] ||
-                        (item.images && item.images[0]) ||
-                        'https://via.placeholder.com/150',
-                    }}
-                    style={styles.campaignImage}
-                  />
-                  <View style={styles.campaignDetails}>
-                    <Text style={styles.campaignTitle}>{item.title}</Text>
-                    <Text style={styles.progressText}>{item.status}</Text>
-                    <View style={styles.progressBar}>
-                      <View
-                        style={[
-                          styles.progressFill,
-                          {
-                            width: `${
-                              (item.raisedAmount / item.amount) * 100 || 0
-                            }%`,
-                          },
-                        ]}
-                      />
-                    </View>
-                    <View style={styles.infoRow}>
-                      <Text style={styles.infoLabel}>Duration</Text>
-                      <Text style={styles.infoLabel}>Location</Text>
-                    </View>
-                    <View style={styles.infoRow}>
-                      <Text style={styles.infoValueDate}>
-                        {Array.isArray(item.duration)
-                          ? item.duration.join(' - ')
-                          : item.duration}
-                      </Text>
-                      <Text style={styles.infoValue}>{item.location}</Text>
-                    </View>
+            filteredCampaigns.map(item => (
+              <TouchableOpacity
+                key={item._id}
+                onPress={() =>
+                  navigation.navigate('myCampaignEdit', {
+                    item,
+                    image:
+                      images[item._id] || (item.images && item.images[0]) || '',
+                    id: item._id,
+                  })
+                }
+                style={styles.campaignCard}>
+                <Image
+                  source={{
+                    uri:
+                      images[item._id] ||
+                      (item.images && item.images[0]) ||
+                      'https://via.placeholder.com/150',
+                  }}
+                  style={styles.campaignImage}
+                />
+                <View style={styles.campaignDetails}>
+                  <Text style={styles.campaignTitle}>{item.title}</Text>
+                  <Text style={styles.progressText}>{item.status}</Text>
+                  <View style={styles.progressBar}>
+                    <View
+                      style={[
+                        styles.progressFill,
+                        {
+                          width: `${
+                            (item.raisedAmount / item.amount) * 100 || 0
+                          }%`,
+                        },
+                      ]}
+                    />
                   </View>
-                </TouchableOpacity>
-              );
-            })
+                  <View style={styles.infoRow}>
+                    <Text style={styles.infoLabel}>Duration</Text>
+                    <Text style={styles.infoLabel}>Location</Text>
+                  </View>
+                  <View style={styles.infoRow}>
+                    <Text style={styles.infoValueDate}>
+                      {Array.isArray(item.duration)
+                        ? item.duration.join(' - ')
+                        : item.duration}
+                    </Text>
+                    <Text style={styles.infoValue}>{item.location}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            ))
           ) : (
             <View style={{alignItems: 'center', marginTop: 20}}>
               <Image
@@ -273,6 +266,7 @@ const styles = StyleSheet.create({
   },
   searchInput: {flex: 1, fontSize: 16, color: '#333'},
   searchIcon: {padding: 10},
+
   tabContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -314,7 +308,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     paddingVertical: 10,
   },
-  campaignImage: {width: 120, height: 120, borderRadius: 10},
+  campaignImage: {width: 120, height: 'auto', borderRadius: 10},
   campaignDetails: {flex: 1, marginLeft: 10},
   campaignTitle: {fontSize: 14, fontWeight: 'bold', marginVertical: 5},
   progressBar: {

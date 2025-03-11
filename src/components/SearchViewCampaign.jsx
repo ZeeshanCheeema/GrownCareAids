@@ -60,6 +60,13 @@ const SearchViewCampaign = () => {
       return;
     }
 
+    const loggedInUserId = 'YOUR_LOGGED_IN_USER_ID';
+
+    if (loggedInUserId === item._id) {
+      Alert.alert('Error', 'You cannot report your own campaign.');
+      return;
+    }
+
     try {
       console.log('Sending report with:', {
         campaignId: id,
@@ -72,11 +79,18 @@ const SearchViewCampaign = () => {
       }).unwrap();
 
       console.log('Report Created:', response);
-      Alert.alert('Success', 'Report created successfully!');
+      if (response.status === 200) {
+        Alert.alert('Success', response?.message);
+      } else {
+        Alert.alert('Error', response?.message);
+      }
       setModalVisible(false);
     } catch (err) {
       console.error('Failed to create report:', err);
-      Alert.alert('Error', 'Failed to create report. Please try again.');
+      Alert.alert(
+        'Error',
+        err?.data?.message || 'Failed to report the campaign.',
+      );
     }
   };
 

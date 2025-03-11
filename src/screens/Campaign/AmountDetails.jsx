@@ -11,6 +11,7 @@ import {
   ScrollView,
   FlatList,
 } from 'react-native';
+import DateTimePicker from '@react-native-community/datetimepicker';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -20,27 +21,17 @@ const {width, height} = Dimensions.get('window');
 
 const AmountDetails = ({route}) => {
   const navigation = useNavigation();
+  const {id, item, image = []} = route.params || {};
 
-  // Get passed parameters for editing
-  const {
-    id,
-    title,
-    category,
-    location,
-    city,
-    description: initialDescription = 'no description',
-    duration: initialDuration = '00',
-    images: initialImages = [],
-    totalFundraise: initialTotalFundraise = '',
-  } = route.params || {};
+  const [amount, setAmount] = useState(item?.amount || '');
+  const [startDate, setStartDate] = useState(item?.startDate || new Date());
+  const [endDate, setEndDate] = useState(item?.endDate || new Date());
+  const [description, setDescription] = useState(item?.description || '');
+  const [images, setImages] = useState(image || []);
+  const [showStartPicker, setShowStartPicker] = useState(false);
+  const [showEndPicker, setShowEndPicker] = useState(false);
 
-  const [amount, setAmount] = useState(initialTotalFundraise);
-  const [startDate, setStartDate] = useState(initialDuration);
-  const [endDate, setEndDate] = useState(initialDuration);
-  const [description, setDescription] = useState(initialDescription);
-  const [images, setImages] = useState(initialImages);
-  console.log('ïmages', images);
-
+  // Open Image Library
   const handleImagePicker = () => {
     const options = {mediaType: 'photo', quality: 1, selectionLimit: 8};
     launchImageLibrary(options, response => {
@@ -50,7 +41,7 @@ const AmountDetails = ({route}) => {
     });
   };
 
-  // Camera Picker
+  // Open Camera
   const handleCameraPicker = () => {
     const options = {mediaType: 'photo', quality: 1, saveToPhotos: true};
     launchCamera(options, response => {
@@ -60,26 +51,26 @@ const AmountDetails = ({route}) => {
     });
   };
 
-  // Remove image
+  // Remove Image
   const removeImage = index => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Validation function
+  // Validation
   const validateForm = () => {
     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
       Alert.alert('Validation Error', 'Please enter a valid amount');
       return false;
     }
     if (!startDate) {
-      Alert.alert('Validation Error', 'Please enter a start date');
+      Alert.alert('Validation Error', 'Please select a start date');
       return false;
     }
     if (!endDate) {
-      Alert.alert('Validation Error', 'Please enter an end date');
+      Alert.alert('Validation Error', 'Please select an end date');
       return false;
     }
-    if (new Date(startDate) >= new Date(endDate)) {
+    if (new Date(startDate).getTime() >= new Date(endDate).getTime()) {
       Alert.alert('Validation Error', 'End date should be after start date');
       return false;
     }
@@ -116,7 +107,7 @@ const AmountDetails = ({route}) => {
       </View>
 
       <ScrollView contentContainerStyle={{paddingBottom: 50}}>
-        {/* Input Fields */}
+        {/* Amount Input */}
         <TextInput
           style={styles.input}
           placeholder="Enter Amount"
@@ -125,61 +116,80 @@ const AmountDetails = ({route}) => {
           keyboardType="numeric"
           placeholderTextColor={'#858585'}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Start Date (YYYY-MM-DD)"
-          value={startDate}
-          onChangeText={setStartDate}
-          placeholderTextColor={'#858585'}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="End Date (YYYY-MM-DD)"
-          value={endDate}
-          onChangeText={setEndDate}
-          placeholderTextColor={'#858585'}
-        />
 
-        {/* Attach Row: Left column for icons, right column for images */}
+        {/* Start Date Picker */}
+        <TouchableOpacity
+          style={styles.input}
+          onPress={() => setShowStartPicker(true)}>
+          <Text style={{color: '#858585'}}>
+            {startDate ? startDate.toDateString() : 'Select Start Date'}
+          </Text>
+        </TouchableOpacity>
+        {showStartPicker && (
+          <DateTimePicker
+            value={startDate}
+            mode="date"
+            onChange={(event, date) => {
+              setShowStartPicker(false);
+              if (date) setStartDate(date);
+            }}
+          />
+        )}
+
+        {/* End Date Picker */}
+        <TouchableOpacity
+          style={styles.input}
+          onPress={() => setShowEndPicker(true)}>
+          <Text style={{color: '#858585'}}>
+            {endDate ? endDate.toDateString() : 'Select End Date'}
+          </Text>
+        </TouchableOpacity>
+        {showEndPicker && (
+          <DateTimePicker
+            value={endDate}
+            mode="date"
+            onChange={(event, date) => {
+              setShowEndPicker(false);
+              if (date) setEndDate(date);
+            }}
+          />
+        )}
+
+        {/* Attachments */}
         <View style={styles.attachRow}>
-          {/* Icon Column */}
-          <View style={styles.iconColumn}>
-            {/* Camera Button */}
-            <TouchableOpacity
-              style={styles.iconButton}
-              onPress={handleCameraPicker}>
-              <Icon name="camera-alt" size={22} color="#EA7E24" />
-            </TouchableOpacity>
-            {/* Gallery Button */}
-            <TouchableOpacity
-              style={styles.iconButton}
-              onPress={handleImagePicker}>
-              <Icon name="photo-library" size={22} color="#EA7E24" />
-            </TouchableOpacity>
-          </View>
-
-          {/* Image Column */}
-          <View style={styles.imageColumn}>
-            {images.length > 0 && (
-              <FlatList
-                data={images}
-                keyExtractor={(_, index) => String(index)}
-                numColumns={3}
-                style={styles.imageGrid}
-                renderItem={({item, index}) => (
-                  <View style={styles.imageWrapper}>
-                    <Image source={{uri: item}} style={styles.selectedImage} />
-                    <TouchableOpacity
-                      style={styles.removeImageButton}
-                      onPress={() => removeImage(index)}>
-                      <AntDesign name="closecircle" size={11} color="#EA7E24" />
-                    </TouchableOpacity>
-                  </View>
-                )}
-              />
-            )}
-          </View>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={handleCameraPicker}>
+            <Icon name="camera-alt" size={22} color="#EA7E24" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.iconButton}
+            onPress={handleImagePicker}>
+            <Icon name="photo-library" size={22} color="#EA7E24" />
+          </TouchableOpacity>
         </View>
+
+        {/* Image Preview */}
+        {images.length > 0 ? (
+          <FlatList
+            data={images}
+            keyExtractor={(_, index) => String(index)}
+            numColumns={3}
+            style={styles.imageGrid}
+            renderItem={({item, index}) => (
+              <View style={styles.imageWrapper}>
+                <Image source={{uri: item}} style={styles.selectedImage} />
+                <TouchableOpacity
+                  style={styles.removeImageButton}
+                  onPress={() => removeImage(index)}>
+                  <AntDesign name="closecircle" size={11} color="#EA7E24" />
+                </TouchableOpacity>
+              </View>
+            )}
+          />
+        ) : (
+          <Text style={styles.placeholderText}>No images selected</Text>
+        )}
 
         {/* Description */}
         <TextInput
@@ -203,15 +213,14 @@ const AmountDetails = ({route}) => {
             onPress={() => {
               if (validateForm()) {
                 navigation.navigate('Review', {
-                  title,
-                  category,
-                  location,
-                  city,
-                  amount,
-                  duration: [startDate, endDate],
-                  description,
-                  images,
                   id,
+                  item: {
+                    ...item,
+                    amount,
+                    duration: [startDate.toISOString(), endDate.toISOString()], // Pass as array
+                    description,
+                    images,
+                  },
                 });
               }
             }}>
@@ -223,23 +232,37 @@ const AmountDetails = ({route}) => {
   );
 };
 
+export default AmountDetails;
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F9F9F9'},
+  container: {
+    flex: 1,
+    backgroundColor: '#F9F9F9',
+  },
   headerTop: {
     backgroundColor: '#EA7E24',
     height: height * 0.15,
+    borderBottomRightRadius: 20,
+    borderBottomLeftRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'row',
     position: 'relative',
   },
-  backButton: {position: 'absolute', left: 15, top: 10, zIndex: 1},
-  title: {fontSize: 22, fontWeight: 'bold', color: 'white'},
+  backButton: {
+    position: 'absolute',
+    left: 15,
+    top: 20,
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: 'white',
+  },
   stepperContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 25,
+    marginVertical: 20,
   },
   step: {
     width: 30,
@@ -249,12 +272,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  activeStep: {backgroundColor: '#EA7E24'},
-  stepText: {color: '#fff', fontWeight: 'bold'},
-  line: {width: width * 0.25, height: 3, backgroundColor: '#D3D3D3'},
-  activeLine: {width: width * 0.25, height: 3, backgroundColor: '#EA7E24'},
+  activeStep: {
+    backgroundColor: '#EA7E24',
+  },
+  stepText: {
+    color: '#fff',
+    fontWeight: 'bold',
+  },
+  line: {
+    width: width * 0.25,
+    height: 3,
+    backgroundColor: '#D3D3D3',
+  },
+  activeLine: {
+    width: width * 0.25,
+    height: 3,
+    backgroundColor: '#EA7E24',
+  },
   input: {
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: '#ccc',
     padding: 15,
     borderRadius: 10,
@@ -266,30 +302,25 @@ const styles = StyleSheet.create({
   },
   attachRow: {
     flexDirection: 'row',
+    justifyContent: 'center',
     marginHorizontal: 20,
     marginBottom: 15,
     padding: 10,
-    elevation: 2,
     backgroundColor: '#FFFFFF',
     borderRadius: 10,
-  },
-  iconColumn: {
-    width: 80,
-    marginRight: 10,
-    justifyContent: 'space-between',
+    elevation: 2,
   },
   iconButton: {
     backgroundColor: '#FFFFFF',
-    paddingVertical: 12,
+    padding: 12,
     borderRadius: 10,
     alignItems: 'center',
     elevation: 2,
-  },
-  imageColumn: {
-    flex: 1,
+    marginHorizontal: 10,
   },
   imageGrid: {
-    width: '100%',
+    marginHorizontal: 20,
+    marginTop: 10,
   },
   imageWrapper: {
     position: 'relative',
@@ -297,8 +328,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   selectedImage: {
-    width: (width - 100 - 70) / 4,
-    height: 47,
+    width: (width - 80) / 4,
+    height: 60,
     borderRadius: 8,
   },
   removeImageButton: {
@@ -306,13 +337,15 @@ const styles = StyleSheet.create({
     top: -3,
     right: -3,
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: 15,
     padding: 2,
-    width: 15,
-    height: 15,
+    width: 18,
+    height: 18,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   textArea: {
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderColor: '#ccc',
     padding: 15,
     borderRadius: 10,
@@ -322,6 +355,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     height: 100,
     color: '#333',
+  },
+  placeholderText: {
+    textAlign: 'center',
+    color: '#858585',
+    fontSize: 14,
+    marginTop: 10,
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -335,14 +374,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     borderRadius: 8,
   },
-  backButtonText: {color: '#333', fontSize: 16, fontWeight: 'bold'},
+  backButtonText: {
+    color: '#333',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   continueButton: {
     backgroundColor: '#EA7E24',
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
   },
-  buttonText: {color: '#fff', fontSize: 16, fontWeight: 'bold'},
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
 });
-
-export default AmountDetails;
