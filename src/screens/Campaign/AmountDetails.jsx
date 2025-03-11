@@ -33,7 +33,7 @@ const AmountDetails = ({route}) => {
 
   // Open Image Library
   const handleImagePicker = () => {
-    const options = {mediaType: 'photo', quality: 1, selectionLimit: 8};
+    const options = {mediaType: 'photo', quality: 1, selectionLimit: 6};
     launchImageLibrary(options, response => {
       if (response.assets && response.assets.length > 0) {
         setImages(prev => [...prev, ...response.assets.map(img => img.uri)]);
@@ -117,79 +117,84 @@ const AmountDetails = ({route}) => {
           placeholderTextColor={'#858585'}
         />
 
-        {/* Start Date Picker */}
-        <TouchableOpacity
-          style={styles.input}
-          onPress={() => setShowStartPicker(true)}>
-          <Text style={{color: '#858585'}}>
-            {startDate ? startDate.toDateString() : 'Select Start Date'}
-          </Text>
-        </TouchableOpacity>
-        {showStartPicker && (
-          <DateTimePicker
-            value={startDate}
-            mode="date"
-            onChange={(event, date) => {
-              setShowStartPicker(false);
-              if (date) setStartDate(date);
-            }}
-          />
-        )}
+        <View style={styles.date}>
+          {/* Start Date Picker */}
+          <TouchableOpacity
+            style={styles.dateinput}
+            onPress={() => setShowStartPicker(true)}>
+            <Text style={{color: '#858585'}}>
+              {startDate ? startDate.toDateString() : 'Select Start Date'}
+            </Text>
+          </TouchableOpacity>
+          {showStartPicker && (
+            <DateTimePicker
+              value={startDate}
+              mode="date"
+              onChange={(event, date) => {
+                setShowStartPicker(false);
+                if (date) setStartDate(date);
+              }}
+            />
+          )}
 
-        {/* End Date Picker */}
-        <TouchableOpacity
-          style={styles.input}
-          onPress={() => setShowEndPicker(true)}>
-          <Text style={{color: '#858585'}}>
-            {endDate ? endDate.toDateString() : 'Select End Date'}
-          </Text>
-        </TouchableOpacity>
-        {showEndPicker && (
-          <DateTimePicker
-            value={endDate}
-            mode="date"
-            onChange={(event, date) => {
-              setShowEndPicker(false);
-              if (date) setEndDate(date);
-            }}
-          />
-        )}
+          {/* End Date Picker */}
+          <TouchableOpacity
+            style={styles.dateinput}
+            onPress={() => setShowEndPicker(true)}>
+            <Text style={{color: '#858585'}}>
+              {endDate ? endDate.toDateString() : 'Select End Date'}
+            </Text>
+          </TouchableOpacity>
+          {showEndPicker && (
+            <DateTimePicker
+              value={endDate}
+              mode="date"
+              onChange={(event, date) => {
+                setShowEndPicker(false);
+                if (date) setEndDate(date);
+              }}
+            />
+          )}
+        </View>
 
         {/* Attachments */}
         <View style={styles.attachRow}>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={handleCameraPicker}>
-            <Icon name="camera-alt" size={22} color="#EA7E24" />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.iconButton}
-            onPress={handleImagePicker}>
-            <Icon name="photo-library" size={22} color="#EA7E24" />
-          </TouchableOpacity>
-        </View>
-
-        {/* Image Preview */}
-        {images.length > 0 ? (
-          <FlatList
-            data={images}
-            keyExtractor={(_, index) => String(index)}
-            numColumns={3}
-            style={styles.imageGrid}
-            renderItem={({item, index}) => (
-              <View style={styles.imageWrapper}>
-                <Image source={{uri: item}} style={styles.selectedImage} />
-                <TouchableOpacity
-                  style={styles.removeImageButton}
-                  onPress={() => removeImage(index)}>
-                  <AntDesign name="closecircle" size={11} color="#EA7E24" />
-                </TouchableOpacity>
-              </View>
+          <View style={styles.IconRow}>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={handleCameraPicker}>
+              <Icon name="camera-alt" size={22} color="#EA7E24" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.iconButton}
+              onPress={handleImagePicker}>
+              <Icon name="photo-library" size={22} color="#EA7E24" />
+            </TouchableOpacity>
+          </View>
+          <View style={styles.ImgRow}>
+            {/* Image Preview */}
+            {images.length > 0 < 6 ? (
+              <FlatList
+                data={images}
+                keyExtractor={(_, index) => String(index)}
+                numColumns={3}
+                style={styles.imageGrid}
+                renderItem={({item, index}) => (
+                  <View style={styles.imageWrapper}>
+                    <Image source={{uri: item}} style={styles.selectedImage} />
+                    <TouchableOpacity
+                      style={styles.removeImageButton}
+                      onPress={() => removeImage(index)}>
+                      <AntDesign name="closecircle" size={11} color="#EA7E24" />
+                    </TouchableOpacity>
+                  </View>
+                )}
+              />
+            ) : (
+              <Text style={styles.placeholderText}>No images selected</Text>
             )}
-          />
-        ) : (
-          <Text style={styles.placeholderText}>No images selected</Text>
-        )}
+          </View>
+        </View>
 
         {/* Description */}
         <TextInput
@@ -300,9 +305,27 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     color: '#333',
   },
-  attachRow: {
+  dateinput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 12,
+    fontSize: 16,
+    backgroundColor: '#fff',
+    color: '#333',
+    width: 140,
+  },
+  date: {
     flexDirection: 'row',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
+    gap: 40,
+    marginHorizontal: 20,
+  },
+  attachRow: {
+    position: 'relative',
+    flexDirection: 'row',
+
     marginHorizontal: 20,
     marginBottom: 15,
     padding: 10,
@@ -310,13 +333,23 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 2,
   },
+  IconRow: {
+    width: 80,
+  },
+  imgRow: {
+    flexWrap: 'wrap',
+  },
   iconButton: {
     backgroundColor: '#FFFFFF',
     padding: 12,
-    borderRadius: 10,
+    borderRadius: '50%',
     alignItems: 'center',
-    elevation: 2,
+    borderColor: '#EA7E24',
     marginHorizontal: 10,
+    borderWidth: 1,
+    width: 45,
+    height: 45,
+    marginVertical: 7,
   },
   imageGrid: {
     marginHorizontal: 20,
@@ -328,8 +361,8 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   selectedImage: {
-    width: (width - 80) / 4,
-    height: 60,
+    width: (width - 200) / 3,
+    height: 47,
     borderRadius: 8,
   },
   removeImageButton: {
