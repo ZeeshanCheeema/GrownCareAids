@@ -21,32 +21,41 @@ const {width, height} = Dimensions.get('window');
 
 const AmountDetails = ({route}) => {
   const navigation = useNavigation();
-  const {id, item, image = []} = route.params || {};
+  const {id, item} = route.params || {};
 
   const [amount, setAmount] = useState(item?.amount || '');
   const [startDate, setStartDate] = useState(item?.startDate || new Date());
   const [endDate, setEndDate] = useState(item?.endDate || new Date());
   const [description, setDescription] = useState(item?.description || '');
-  const [images, setImages] = useState(image || []);
+  const [images, setImages] = useState(item?.images || []);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
-
-  // Open Image Library
   const handleImagePicker = () => {
     const options = {mediaType: 'photo', quality: 1, selectionLimit: 6};
     launchImageLibrary(options, response => {
       if (response.assets && response.assets.length > 0) {
-        setImages(prev => [...prev, ...response.assets.map(img => img.uri)]);
+        if (images.length + response.assets.length > 6) {
+          Alert.alert('You can only upload up to 6 images.');
+          return;
+        }
+        const selectedImages = response.assets.map(img => img.uri);
+        console.log('Selected Images:', selectedImages);
+        setImages(prev => [...prev, ...selectedImages]);
       }
     });
   };
 
-  // Open Camera
   const handleCameraPicker = () => {
     const options = {mediaType: 'photo', quality: 1, saveToPhotos: true};
     launchCamera(options, response => {
       if (response.assets && response.assets.length > 0) {
-        setImages(prev => [...prev, ...response.assets.map(img => img.uri)]);
+        if (images.length + response.assets.length > 6) {
+          Alert.alert('You can only upload up to 6 images.');
+          return;
+        }
+        const selectedImage = response.assets[0].uri;
+        console.log('Captured Image:', selectedImage);
+        setImages(prev => [...prev, selectedImage]);
       }
     });
   };
@@ -341,8 +350,8 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     backgroundColor: '#FFFFFF',
-    padding: 12,
-    borderRadius: '50%',
+    padding: 15,
+    borderRadius: '22.5',
     alignItems: 'center',
     borderColor: '#EA7E24',
     marginHorizontal: 10,

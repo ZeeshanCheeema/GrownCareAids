@@ -89,6 +89,13 @@ export const apiSlice = createApi({
       }),
     }),
 
+    changePassword: builder.mutation({
+      query: data => ({
+        url: '/changePassword',
+        method: 'POST',
+        body: data,
+      }),
+    }),
     getAllCampaigns: builder.query({
       query: () => '/getAllCampaigns',
       providesTags: ['Campaign'],
@@ -134,7 +141,7 @@ export const apiSlice = createApi({
     }),
     uploadImage: builder.mutation({
       query: imageData => ({
-        url: '/uploadImage', // Ensure this matches your backend API endpoint
+        url: '/uploadImage',
         method: 'POST',
         body: imageData,
       }),
@@ -228,4 +235,5 @@ export const {
   useGetUserNotificationsQuery,
   useGetImageQuery,
   useUploadImageMutation,
+  useChangePasswordMutation,
 } = apiSlice;

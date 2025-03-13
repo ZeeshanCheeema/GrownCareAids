@@ -13,12 +13,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useDeleteCampaignMutation} from '../services/Auth/AuthApi';
 const {width, height} = Dimensions.get('window');
-
+import logo from '../assets/logo.png';
 const MyCampaignEdit = () => {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const {item, image = []} = route.params || {};
+  const {item, image} = route.params || {};
 
   const progress =
     item.amount > 0 ? (item.raisedAmount / item.amount) * 100 : 0;
@@ -71,17 +71,12 @@ const MyCampaignEdit = () => {
 
         {/* Delete Button */}
         <TouchableOpacity style={styles.DeleteButton} onPress={handleDelete}>
-          <AntDesign name="delete" size={25} color={'red'} />
+          <Icon name="delete" size={25} color="red" />
         </TouchableOpacity>
 
         {/* Campaign Image */}
         <Image
-          source={{
-            uri:
-              image[item._id] ||
-              (item.images && item.images[0]) ||
-              'https://via.placeholder.com/150',
-          }}
+          source={image ? {uri: image} : require('../assets/SearchBg.png')}
           style={styles.campaignImage}
         />
       </View>
@@ -141,7 +136,7 @@ const MyCampaignEdit = () => {
             onPress={() =>
               navigation.navigate('FundraiserDetails', {
                 id: item._id,
-                image: [],
+                images: [],
                 item,
               })
             }>

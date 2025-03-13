@@ -9,6 +9,7 @@ import {
   Modal,
   ActivityIndicator,
   Alert,
+  Animated,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -20,7 +21,8 @@ import {
 } from '../services/Auth/AuthApi';
 import DonationModal from './DonateModel';
 import {useSelector} from 'react-redux';
-
+import logo from '../assets/logo.png';
+import Loader from './Loader';
 const SearchViewCampaign = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -99,9 +101,7 @@ const SearchViewCampaign = () => {
   };
 
   if (isLoading) {
-    return (
-      <ActivityIndicator size="large" color="#1A3F1E" style={styles.loader} />
-    );
+    return <Loader message="Loading campaigns..." logoSource={logo} />;
   }
 
   if (error) {

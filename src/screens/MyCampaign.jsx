@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   TextInput,
@@ -11,6 +11,7 @@ import {
   Text,
   TouchableWithoutFeedback,
   Keyboard,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
@@ -34,71 +35,88 @@ const Mycampaign = () => {
   const [images, setImages] = useState({});
   const [profileImage, setProfileImage] = useState(null);
 
+  // Set profile image from user data
   useEffect(() => {
     if (userProfile?.data?.profileImage) {
       setProfileImage(userProfile.data.profileImage);
     }
   }, [userProfile]);
 
+  // Fetch campaign images
   const fetchCampaignImages = async campaigns => {
-    if (!campaigns || campaigns.length === 0) return;
+    if (!campaigns?.length) return;
 
+    const newImages = {...images};
     const imagePromises = campaigns.map(async fund => {
-      if (!fund.images || fund.images.length === 0)
-        return {id: fund._id, imageUrl: null};
-
+      if (!fund.images?.length || newImages[fund._id]) return;
       try {
         const result = await dispatch(
           apiSlice.endpoints.getImage.initiate(fund.images[0]),
         ).unwrap();
-        return {id: fund._id, imageUrl: result.data};
+        newImages[fund._id] = result.data;
       } catch (error) {
-        return {id: fund._id, imageUrl: null};
+        newImages[fund._id] = null;
       }
     });
 
-    const imageResults = await Promise.all(imagePromises);
-    const imageMap = imageResults.reduce((acc, {id, imageUrl}) => {
-      acc[id] = imageUrl;
-      return acc;
-    }, {});
-
-    setImages(imageMap);
+    await Promise.all(imagePromises);
+    setImages(newImages);
   };
 
+  // Filter campaigns based on tab selection
   useEffect(() => {
     if (data?.data) {
-      let filtered = data.data.filter(
+      const filtered = data.data.filter(
         item => item.status.toLowerCase() === selectedTab.toLowerCase(),
       );
       setFilteredCampaigns(filtered);
-      fetchCampaignImages(data.data);
+      fetchCampaignImages(filtered); // Fetch only necessary images
     }
   }, [data, selectedTab]);
+  const formatDate = dateString => {
+    if (!dateString) return 'N/A'; // Handle empty values
 
+    const date = new Date(dateString);
+    if (isNaN(date)) return 'Invalid Date'; // Handle invalid dates
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`; // Returns DD-MM-YYYY format
+  };
+
+  // Handle search
   const handleSearch = text => {
     setSearchText(text);
     if (!text.trim()) {
-      const reset = data?.data?.filter(
-        item => item.status.toLowerCase() === selectedTab.toLowerCase(),
+      setFilteredCampaigns(
+        data?.data?.filter(
+          item => item.status.toLowerCase() === selectedTab.toLowerCase(),
+        ) || [],
       );
-      setFilteredCampaigns(reset || []);
       return;
     }
-    const filtered = filteredCampaigns.filter(item =>
-      item.title.toLowerCase().includes(text.toLowerCase()),
+    const filtered = data?.data?.filter(
+      item =>
+        item.title.toLowerCase().includes(text.toLowerCase()) &&
+        item.status.toLowerCase() === selectedTab.toLowerCase(),
     );
-    setFilteredCampaigns(filtered);
+    setFilteredCampaigns(filtered || []);
   };
 
+  // Loading state
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <Text>Loading campaigns...</Text>
+        <Image source={require('../assets/logo.png')} style={styles.logo} />
+        <ActivityIndicator size="large" color="#EA7E24" style={styles.loader} />
+        <Text style={styles.loadingText}>Loading campaigns...</Text>
       </View>
     );
   }
 
+  // Error state
   if (error) {
     return (
       <View style={styles.errorContainer}>
@@ -118,9 +136,7 @@ const Mycampaign = () => {
           <View style={styles.headerTop}>
             <Image source={require('../assets/logoSmall.png')} />
             <Image
-              source={{
-                uri: profileImage || 'https://via.placeholder.com/150',
-              }}
+              source={{uri: profileImage || 'https://via.placeholder.com/150'}}
               style={styles.userImg}
             />
           </View>
@@ -145,7 +161,7 @@ const Mycampaign = () => {
 
         {/* Tabs */}
         <View style={styles.tabContainer}>
-          {['Active', 'Pending', 'Complete'].map(tab => (
+          {['Active', 'Pending', 'Completed'].map(tab => (
             <TouchableOpacity
               key={tab}
               style={[
@@ -172,9 +188,9 @@ const Mycampaign = () => {
                 key={item._id}
                 onPress={() =>
                   navigation.navigate('myCampaignEdit', {
-                    item,
                     image:
                       images[item._id] || (item.images && item.images[0]) || '',
+                    item,
                     id: item._id,
                   })
                 }
@@ -210,9 +226,12 @@ const Mycampaign = () => {
                   <View style={styles.infoRow}>
                     <Text style={styles.infoValueDate}>
                       {Array.isArray(item.duration)
-                        ? item.duration.join(' - ')
-                        : item.duration}
+                        ? item.duration
+                            .map(date => formatDate(date))
+                            .join(' - ')
+                        : formatDate(item.duration)}
                     </Text>
+
                     <Text style={styles.infoValue}>{item.location}</Text>
                   </View>
                 </View>
@@ -235,7 +254,26 @@ const Mycampaign = () => {
 
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#F9F9F9', marginBottom: 70},
-  loadingContainer: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F9F9F9',
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+    resizeMode: 'contain',
+  },
+  loader: {
+    marginBottom: 10,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#EA7E24',
+    fontWeight: 'bold',
+  },
   errorContainer: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   header: {
     backgroundColor: '#1A3F1E',

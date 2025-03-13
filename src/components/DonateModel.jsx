@@ -33,20 +33,25 @@ const DonationModal = ({visible, onClose, campaignId, onSuccess}) => {
       Alert.alert('Error', 'Campaign ID is missing.');
       return;
     }
-    console.log(donate);
-    try {
-      await donate({campaignId, amount}).unwrap();
-      Alert.alert('Success', `You have donated $${amount}!`);
-      console.log(`User donated: $${amount} to campaign ${campaignId}`);
 
+    try {
+      const response = await donate({campaignId, amount}).unwrap();
+      Alert.alert('Success', `You have donated $${amount}!`);
+      console.log(
+        `User donated: $${amount} to campaign ${campaignId}`,
+        response,
+      );
+
+      // Reset state
       setSelectedAmount(null);
       setCustomAmount('');
       onClose();
-
       if (onSuccess) onSuccess();
     } catch (error) {
       console.error('Donation failed:', error);
-      Alert.alert('Error', 'Failed to process donation. Please try again.');
+      const errorMessage =
+        error?.data?.message || 'Something went wrong. Please try again.';
+      Alert.alert('Donation Failed', errorMessage);
     }
   };
 
@@ -71,7 +76,8 @@ const DonationModal = ({visible, onClose, campaignId, onSuccess}) => {
                 onPress={() => {
                   setSelectedAmount(amount);
                   setCustomAmount('');
-                }}>
+                }}
+                disabled={isLoading}>
                 <Text
                   style={[
                     styles.amountText,
@@ -93,12 +99,17 @@ const DonationModal = ({visible, onClose, campaignId, onSuccess}) => {
               setCustomAmount(text);
               setSelectedAmount(null);
             }}
+            editable={!isLoading}
           />
 
           <TouchableOpacity
-            style={[styles.submitButton, isLoading && styles.disabledButton]}
+            style={[
+              styles.submitButton,
+              (isLoading || (!selectedAmount && !customAmount)) &&
+                styles.disabledButton,
+            ]}
             onPress={handleSubmit}
-            disabled={isLoading}>
+            disabled={isLoading || (!selectedAmount && !customAmount)}>
             {isLoading ? (
               <ActivityIndicator color="white" />
             ) : (

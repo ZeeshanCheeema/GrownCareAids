@@ -27,10 +27,10 @@ import SettingsScreen from '../screens/Setting/Setting';
 import TermCondition from '../screens/Setting/TermCondition';
 import PrivacyPolicy from '../screens/Setting/PrivacyPolicy';
 import DonationHistory from '../screens/Setting/DonationHistory';
-import Language from '../screens/Setting/Language';
 import FAQ from '../screens/Setting/FAQ';
 import DonationModal from '../components/DonateModel';
 import InitialScreen from '../Routes/InitailScreen';
+import DeleteAccount from '../screens/Setting/DeleteAccount';
 
 const Stack = createStackNavigator();
 
@@ -66,8 +66,9 @@ const Routes = () => {
         <Stack.Screen name="TermCondition" component={TermCondition} />
         <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
         <Stack.Screen name="DonationHistory" component={DonationHistory} />
-        <Stack.Screen name="Language" component={Language} />
+        <Stack.Screen name="DeleteAccount" component={DeleteAccount} />
         <Stack.Screen name="FAQ" component={FAQ} />
+
         <Stack.Screen name="DonationModal" component={DonationModal} />
         <Stack.Screen
           name="SearchViewCampaign"

@@ -137,7 +137,6 @@ const Home = () => {
     </View>
   );
 
-  // Render search results using a FlatList (handles its own scrolling)
   const renderSearchResults = () => (
     <View style={styles.searchResultsContainer}>
       {searchResults.length > 0 ? (
@@ -159,12 +158,21 @@ const Home = () => {
                 style={styles.campaignCard}
                 onPress={() =>
                   navigation.navigate('SearchViewCampaign', {
-                    image: imageUrl,
+                    image:
+                      images[item._id] || (item.images && item.images[0]) || '',
                     item,
                     id: item._id,
                   })
                 }>
-                <Image source={{uri: imageUrl}} style={styles.campaignImage} />
+                <Image
+                  source={{
+                    uri:
+                      images[item._id] ||
+                      (item.images && item.images[0]) ||
+                      'https://via.placeholder.com/150',
+                  }}
+                  style={styles.campaignImage}
+                />
                 <View style={styles.campaignDetails}>
                   <Text style={styles.campaignTitle}>{item.title}</Text>
                   <Text style={styles.progressText}>{item.status}</Text>
@@ -196,7 +204,10 @@ const Home = () => {
         <View style={styles.noResultsContainer}>
           <Image
             source={require('../assets/SearchBg.png')}
-            style={{width: 200, height: 200}}
+            style={{
+              width: 200,
+              height: 200,
+            }}
           />
           <Text style={styles.noDataText}>No campaigns found.</Text>
         </View>
@@ -359,6 +370,11 @@ const styles = StyleSheet.create({
     left: 50,
     lineHeight: 37,
     letterSpacing: -0.28,
+  },
+  noResultsContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    top: 30,
   },
   startButton: {
     width: '70%',

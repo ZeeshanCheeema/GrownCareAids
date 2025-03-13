@@ -78,7 +78,6 @@ const TopCampaigns = ({searchQuery = ''}) => {
 
     const progress =
       item.amount > 0 ? (item.raisedAmount / item.amount) * 100 : 0;
-    const imageUrl = images[item._id] || placeholderImage;
 
     return (
       <View style={[styles.card, {width: width * 0.6}]}>
@@ -122,8 +121,8 @@ const TopCampaigns = ({searchQuery = ''}) => {
           style={[styles.button, {paddingVertical: height * 0.015}]}
           onPress={() =>
             navigation.navigate('SearchViewCampaign', {
+              image: images[item._id] || (item.images && item.images[0]) || '',
               item,
-              image: imageUrl,
               id: item._id,
             })
           }>

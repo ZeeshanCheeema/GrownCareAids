@@ -89,9 +89,9 @@ const styles = StyleSheet.create({
   },
   faqItem: {
     backgroundColor: '#1A3F1E',
-    borderRadius: 8,
+    borderRadius: 25,
     marginBottom: 10,
-    padding: 10,
+    padding: 15,
   },
   backButton: {
     position: 'absolute',
@@ -119,7 +119,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     fontSize: 14,
     marginTop: 10,
-    paddingHorizontal: 5,
+    padding: 5,
+    borderRadius: 10,
+    lineHeight: 21,
   },
 });
 

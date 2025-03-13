@@ -20,7 +20,7 @@ const FundraiserDetails = () => {
   const route = useRoute();
   const {data, isLoading, error} = useGetCategoriesQuery();
 
-  const {id = null, item = {}, image = []} = route.params || {};
+  const {id = null, item = {}, images = []} = route.params || {};
 
   // Form states (pre-filled for editing)
   const [title, setTitle] = useState(item.title || '');
@@ -127,7 +127,7 @@ const FundraiserDetails = () => {
                   location,
                   city,
                 },
-                image: [],
+                images,
               });
             }
           }}>

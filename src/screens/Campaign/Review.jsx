@@ -59,7 +59,7 @@ const ReviewScreen = ({route}) => {
         amount,
         duration: [startDate, endDate],
         description,
-        images: [],
+        images,
       };
 
       let response;
@@ -241,8 +241,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: 'bold',
-
     paddingLeft: 20,
+  },
+  subTitle: {
+    color: '#858585',
+    fontWeight: 'bold',
   },
   row: {flexDirection: 'row', marginHorizontal: 30},
   labelColumn: {flex: 1},
@@ -253,6 +256,16 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   value: {color: '#000', marginBottom: 15},
+  imageSection: {
+    width: '90%',
+    flexDirection: 'row',
+    marginHorizontal: 30,
+    overflow: 'hidden',
+  },
+  imagePlaceholder: {
+    overflow: 'hidden',
+    marginLeft: 20,
+  },
   selectedImage: {
     width: 50,
     height: 50,

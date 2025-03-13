@@ -14,6 +14,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useLogoutMutation, useUserProfileQuery} from '../services/Auth/AuthApi';
 import Logout from './Auth/Logout';
 
+import logo from '../assets/logo.png';
+import Loader from '../components/Loader';
+
 const MenuItem = ({icon, text, onPress}) => (
   <TouchableOpacity style={styles.menuItem} onPress={onPress}>
     <Icon name={icon} size={24} color="#1D4F27" style={styles.icon} />
@@ -40,11 +43,7 @@ const ProfileScreen = () => {
   };
   console.log(userProfile);
   if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#1D4F27" />
-      </View>
-    );
+    return <Loader message="Loading campaigns..." logoSource={logo} />;
   }
 
   if (error || !userProfile) {

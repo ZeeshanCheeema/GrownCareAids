@@ -19,11 +19,16 @@ import {
 } from '../../services/Auth/AuthApi';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {useEffect, useState} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+import logo from '../../assets/logo.png';
+import Loader from '../../components/Loader';
 
 const {width, height} = Dimensions.get('window');
 
 const EditProfileScreen = () => {
   const navigation = useNavigation();
+
   const {data, isLoading, error} = useUserProfileQuery();
   const userProfile = data?.data;
 
@@ -42,47 +47,93 @@ const EditProfileScreen = () => {
 
   const [profileImage, setProfileImage] = useState('');
 
-  // Update state when userProfile data is fetched
   useEffect(() => {
     if (userProfile) {
       setUser(prevState => ({
         ...prevState,
-        firstName: userProfile?.firstName || prevState.firstName,
-        lastName: userProfile?.lastName || prevState.lastName,
-        phone: userProfile?.phone || prevState.phone,
-        dob: userProfile?.dob || prevState.dob,
-        gender: userProfile?.gender || prevState.gender,
-        address: userProfile?.address || prevState.address,
-        bio: userProfile?.bio || prevState.bio,
-        country: userProfile?.country || prevState.country,
+        firstName: userProfile?.firstName || '',
+        lastName: userProfile?.lastName || '',
+        phone: userProfile?.phone || '',
+        dob: userProfile?.dob || '',
+        gender: userProfile?.gender || '',
+        address: userProfile?.address || '',
+        bio: userProfile?.bio || '',
+        country: userProfile?.country || '',
       }));
       setProfileImage(userProfile?.profileImage || '');
     }
   }, [userProfile]);
 
   // Image Picker
-  const handleImagePick = () => {
+  const handleImagePick = async () => {
     Alert.alert('Upload Image', 'Choose an option', [
       {text: 'Cancel', style: 'cancel'},
       {
         text: 'Take Photo',
-        onPress: () =>
-          launchCamera({mediaType: 'photo'}, response => {
-            if (response?.assets?.length > 0) {
-              setProfileImage(response.assets[0].uri);
-            }
-          }),
+        onPress: async () => {
+          const result = await launchCamera({mediaType: 'photo'});
+          if (result.assets && result.assets.length > 0) {
+            uploadImage(result.assets[0]);
+          }
+        },
       },
       {
         text: 'Choose from Gallery',
-        onPress: () =>
-          launchImageLibrary({mediaType: 'photo'}, response => {
-            if (response?.assets?.length > 0) {
-              setProfileImage(response.assets[0].uri);
-            }
-          }),
+        onPress: async () => {
+          const result = await launchImageLibrary({mediaType: 'photo'});
+          if (result.assets && result.assets.length > 0) {
+            uploadImage(result.assets[0]);
+          }
+        },
       },
     ]);
+  };
+
+  const uploadImage = async image => {
+    if (!image?.uri) return;
+
+    const formData = new FormData();
+    formData.append('image', {
+      uri: image.uri,
+      type: image.type || 'image/jpeg',
+      name: image.fileName || 'profile.jpg',
+    });
+
+    const token = await AsyncStorage.getItem('accessToken');
+
+    try {
+      const uploadResponse = await fetch(
+        'https://dev.api.crowdcareaid.com/api/uploadImage',
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        },
+      );
+
+      const uploadData = await uploadResponse.json();
+
+      if (uploadData?.data) {
+        const imageResponse = await fetch(
+          `https://dev.api.crowdcareaid.com/api/getImage?key=${uploadData.data}`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const imageJson = await imageResponse.json();
+        if (imageJson?.data) {
+          setProfileImage(imageJson.data);
+        }
+      }
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
   };
 
   const handleInputChange = (key, value) => {
@@ -92,22 +143,19 @@ const EditProfileScreen = () => {
     }));
   };
 
-  // Function to handle profile update
   const handleSave = async () => {
     try {
       const updatedData = {
         firstName: user.firstName,
         lastName: user.lastName,
-        aboutMe: user.bio, // Ensure bio maps to aboutMe
+        aboutMe: user.bio,
         profileImage: profileImage,
-        countryCode: user.country, // Ensure correct mapping
+        countryCode: user.country,
         phone: user.phone,
         address: user.address,
         dob: user.dob,
         gender: user.gender,
       };
-
-      console.log('Final Data Sent to API:', updatedData); // Debugging log
 
       const response = await editProfile(updatedData).unwrap();
 
@@ -115,7 +163,7 @@ const EditProfileScreen = () => {
         Alert.alert('Success', response?.message);
         navigation.goBack();
       } else {
-        Alert.alert('Error', response?.message);
+        Alert.alert('Error', response?.error?.message);
       }
     } catch (err) {
       console.error('API Error:', err);
@@ -124,11 +172,7 @@ const EditProfileScreen = () => {
   };
 
   if (isLoading) {
-    return (
-      <View style={styles.loaderContainer}>
-        <ActivityIndicator size="large" color="#1D4F27" />
-      </View>
-    );
+    return <Loader message="Loading profile..." logoSource={logo} />;
   }
 
   if (error || !userProfile) {
@@ -141,7 +185,6 @@ const EditProfileScreen = () => {
 
   return (
     <ScrollView style={styles.container}>
-      {/* Profile Image */}
       <ImageBackground
         source={
           profileImage ? {uri: profileImage} : require('../../assets/user.png')
@@ -161,36 +204,31 @@ const EditProfileScreen = () => {
         </View>
       </ImageBackground>
 
-      {/* Profile Form */}
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
+          placeholderTextColor={'#858585'}
           placeholder="First Name"
           value={user.firstName}
           onChangeText={text => handleInputChange('firstName', text)}
         />
         <TextInput
           style={styles.input}
+          placeholderTextColor={'#858585'}
           placeholder="Last Name"
           value={user.lastName}
           onChangeText={text => handleInputChange('lastName', text)}
         />
         <TextInput
           style={styles.input}
+          placeholderTextColor={'#858585'}
           placeholder="Phone"
           value={user.phone}
           keyboardType="phone-pad"
           onChangeText={text => handleInputChange('phone', text)}
         />
-        <TextInput
-          style={styles.input}
-          placeholder="Date of Birth"
-          value={user.dob}
-          onChangeText={text => handleInputChange('dob', text)}
-        />
 
         <RNPickerSelect
-          placeholderTextColor="#858585"
           onValueChange={value => handleInputChange('gender', value)}
           items={[
             {label: 'Male', value: 'male'},
@@ -198,22 +236,39 @@ const EditProfileScreen = () => {
             {label: 'Other', value: 'other'},
           ]}
           value={user.gender}
-          placeholder={{label: 'Select Gender', value: null}}
-          style={styles.inputAndroid}
+          placeholder={{label: 'Select Gender', value: null, color: '#858585'}}
+          style={{
+            inputAndroid: {
+              fontSize: 16,
+              paddingHorizontal: 12,
+              borderWidth: 1,
+              borderColor: '#333',
+              borderRadius: 20,
+              color: 'black',
+              backgroundColor: 'white',
+              marginBottom: 12,
+            },
+            placeholder: {
+              color: '#858585',
+            },
+          }}
         />
+
         <TextInput
           style={styles.input}
-          placeholder="Address"
+          placeholder="address"
+          placeholderTextColor={'#858585'}
           value={user.address}
           onChangeText={text => handleInputChange('address', text)}
         />
         <TextInput
+          placeholderTextColor={'#858585'}
           style={styles.input}
           placeholder="Bio"
           value={user.bio}
-          multiline
           onChangeText={text => handleInputChange('bio', text)}
         />
+
         <TouchableOpacity
           style={styles.saveButton}
           onPress={handleSave}
