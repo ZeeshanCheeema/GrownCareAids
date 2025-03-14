@@ -17,7 +17,7 @@ const {width, height} = Dimensions.get('window');
 
 const MyProfile = () => {
   const navigation = useNavigation();
-  const {data, isLoading, error} = useUserProfileQuery();
+  const {data, isLoading, error, refetch} = useUserProfileQuery();
   const userProfile = data?.data;
 
   if (isLoading) {
@@ -27,10 +27,13 @@ const MyProfile = () => {
       </View>
     );
   }
-  if (error || !userProfile) {
+  if (error) {
     return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.errorText}>Failed to load profile</Text>
+      <View style={styles.errorContainer}>
+        <Text style={{color: 'red'}}>Error fetching campaigns!</Text>
+        <TouchableOpacity style={styles.refetchButton} onPress={refetch}>
+          <Text style={styles.refetchText}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -243,6 +246,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginHorizontal: 5,
   },
+  refetchButton: {
+    marginTop: 15,
+    backgroundColor: '#1A3F1E',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  refetchText: {color: 'white', fontWeight: 'bold'},
   contributionValue: {
     fontSize: width * 0.05,
     fontWeight: 'bold',

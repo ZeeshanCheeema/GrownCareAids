@@ -54,12 +54,13 @@ const Signup = () => {
         password,
       }).unwrap();
 
-      console.log('Signup Response:', response);
-      if (response.status === 200) {
+      console.log('Signup Response:', response); // Debugging
+
+      if (response?.status === 200 || response?.status === 201) {
+        Alert.alert('Success', response.message);
         navigation.navigate('SignupOtp', {email});
-        Alert.alert('success', response.message);
       } else {
-        Alert.alert('success', response.err);
+        Alert.alert('Error', response?.err || 'Signup failed');
       }
     } catch (err) {
       console.error('Signup Error:', err);

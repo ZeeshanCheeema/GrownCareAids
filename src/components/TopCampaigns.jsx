@@ -12,13 +12,13 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {useGetAllCampaignsQuery, apiSlice} from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
-
-const placeholderImage = 'https://via.placeholder.com/150';
+import Loader from './Loader';
+import logo from '../assets/logo.png';
 
 const TopCampaigns = ({searchQuery = ''}) => {
   const navigation = useNavigation();
   const {width, height} = useWindowDimensions();
-  const {data, isLoading, error} = useGetAllCampaignsQuery();
+  const {data, isLoading, error, refetch} = useGetAllCampaignsQuery();
   const dispatch = useDispatch();
 
   const [images, setImages] = useState({});
@@ -55,16 +55,17 @@ const TopCampaigns = ({searchQuery = ''}) => {
   }, [data, fetchCampaignImages]);
 
   if (isLoading) {
-    return (
-      <ActivityIndicator size="large" color="#1A3F1E" style={styles.loader} />
-    );
+    return <Loader message="Loading campaigns..." logoSource={logo} />;
   }
 
   if (error) {
     return (
-      <Text style={styles.error}>
-        ⚠️ Failed to load campaigns. Please try again later.
-      </Text>
+      <View style={styles.errorContainer}>
+        <Text style={{color: 'red'}}>Error fetching campaigns!</Text>
+        <TouchableOpacity style={styles.refetchButton} onPress={refetch}>
+          <Text style={styles.refetchText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -116,16 +117,19 @@ const TopCampaigns = ({searchQuery = ''}) => {
             <Text style={styles.label}>{item.location || 'Unknown'}</Text>
           </View>
         </View>
-
         <TouchableOpacity
           style={[styles.button, {paddingVertical: height * 0.015}]}
-          onPress={() =>
+          onPress={() => {
             navigation.navigate('SearchViewCampaign', {
-              image: images[item._id] || (item.images && item.images[0]) || '',
+              image:
+                images[item._id] ||
+                (Array.isArray(item.images) && item.images.length > 0
+                  ? item.images[0]
+                  : require('../assets/SearchBg.png')),
               item,
               id: item._id,
-            })
-          }>
+            });
+          }}>
           <Text style={[styles.buttonText, {fontSize: width * 0.04}]}>
             View
           </Text>
@@ -175,6 +179,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 8,
   },
+  refetchButton: {
+    marginTop: 15,
+    backgroundColor: '#1A3F1E',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  refetchText: {color: 'white', fontWeight: 'bold'},
   title: {
     fontWeight: '600',
     color: '#1A3F1E',

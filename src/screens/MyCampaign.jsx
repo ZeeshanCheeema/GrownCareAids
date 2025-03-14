@@ -20,13 +20,14 @@ import {
   useUserProfileQuery,
 } from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
-
+import logo from '../assets/logo.png';
+import Loader from '../components/Loader';
 const {width} = Dimensions.get('window');
 
 const Mycampaign = () => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const {data, isLoading, error} = useGetAuthUserCampaignQuery();
+  const {data, isLoading, error, refetch} = useGetAuthUserCampaignQuery();
   const {data: userProfile} = useUserProfileQuery();
 
   const [searchText, setSearchText] = useState('');
@@ -106,21 +107,20 @@ const Mycampaign = () => {
   };
 
   // Loading state
+
   if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Image source={require('../assets/logo.png')} style={styles.logo} />
-        <ActivityIndicator size="large" color="#EA7E24" style={styles.loader} />
-        <Text style={styles.loadingText}>Loading campaigns...</Text>
-      </View>
-    );
+    return <Loader message="Loading campaigns..." logoSource={logo} />;
   }
 
   // Error state
+
   if (error) {
     return (
       <View style={styles.errorContainer}>
         <Text style={{color: 'red'}}>Error fetching campaigns!</Text>
+        <TouchableOpacity style={styles.refetchButton} onPress={refetch}>
+          <Text style={styles.refetchText}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -329,6 +329,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 30,
   },
+  refetchButton: {
+    marginTop: 15,
+    backgroundColor: '#1A3F1E',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  refetchText: {color: 'white', fontWeight: 'bold'},
   tabText: {fontWeight: 'bold', color: '#666'},
   activeTabText: {color: 'white'},
   content: {padding: 20, marginTop: 10},

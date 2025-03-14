@@ -148,6 +148,7 @@ const EditProfileScreen = () => {
       const updatedData = {
         firstName: user.firstName,
         lastName: user.lastName,
+        dob: user.dob,
         aboutMe: user.bio,
         profileImage: profileImage,
         countryCode: user.country,
@@ -222,6 +223,14 @@ const EditProfileScreen = () => {
         <TextInput
           style={styles.input}
           placeholderTextColor={'#858585'}
+          placeholder="dob"
+          value={user.dob}
+          keyboardType="phone-pad"
+          onChangeText={text => handleInputChange('dob', text)}
+        />
+        <TextInput
+          style={styles.input}
+          placeholderTextColor={'#858585'}
           placeholder="Phone"
           value={user.phone}
           keyboardType="phone-pad"
@@ -242,7 +251,7 @@ const EditProfileScreen = () => {
               fontSize: 16,
               paddingHorizontal: 12,
               borderWidth: 1,
-              borderColor: '#333',
+              borderColor: 'black',
               borderRadius: 20,
               color: 'black',
               backgroundColor: 'white',

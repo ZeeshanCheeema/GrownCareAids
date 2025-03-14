@@ -27,7 +27,7 @@ const CategoryCard = ({icon, title}) => (
 );
 
 const Categories = () => {
-  const {data, isLoading, error} = useGetCategoriesQuery();
+  const {data, isLoading, error, refetch} = useGetCategoriesQuery();
 
   if (isLoading) {
     return (
@@ -38,10 +38,15 @@ const Categories = () => {
   }
 
   if (error) {
-    console.log('Error fetching categories:', error);
-    return <Text style={styles.error}>Failed to load categories</Text>;
+    return (
+      <View style={styles.errorContainer}>
+        <Text style={{color: 'red'}}>Error fetching campaigns!</Text>
+        <TouchableOpacity style={styles.refetchButton} onPress={refetch}>
+          <Text style={styles.refetchText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
   }
-
   return (
     <ScrollView
       horizontal
@@ -98,6 +103,14 @@ const styles = StyleSheet.create({
     color: 'red',
     fontSize: width * 0.04,
   },
+  refetchButton: {
+    marginTop: 15,
+    backgroundColor: '#1A3F1E',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  refetchText: {color: 'white', fontWeight: 'bold'},
 });
 
 export default Categories;

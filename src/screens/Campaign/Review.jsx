@@ -8,6 +8,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
+  Alert,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -42,11 +43,19 @@ const ReviewScreen = ({route}) => {
   const categoryName = category?.name || 'N/A';
 
   const [startDate, endDate] = duration || [];
+  const formatDate = date => {
+    const parsedDate = new Date(date);
+    return isNaN(parsedDate)
+      ? 'Invalid Date'
+      : parsedDate.toLocaleDateString('en-US');
+  };
+
   const formattedDuration =
-    startDate && endDate
-      ? `${new Date(startDate).toDateString()} to ${new Date(
-          endDate,
-        ).toDateString()}`
+    startDate &&
+    endDate &&
+    !isNaN(new Date(startDate)) &&
+    !isNaN(new Date(endDate))
+      ? `${formatDate(startDate)} to ${formatDate(endDate)}`
       : 'N/A';
 
   // Function to handle create/update campaign
@@ -70,14 +79,15 @@ const ReviewScreen = ({route}) => {
       }
 
       if (response.status === 200) {
-        alert('Success', response?.message);
+        Alert.alert('Success', response?.message);
         navigation.navigate('BottomTab');
+        console.log(response);
       } else {
-        alert('Error', response?.message);
+        Alert.alert('Error', response?.message);
       }
     } catch (err) {
       console.error('Error saving campaign:', err);
-      alert('Failed to save campaign. Please try again.');
+      Alert.alert('Failed to save campaign. Please try again.');
     }
   };
 
@@ -284,7 +294,7 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
-    width: 160,
+    width: 140,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -293,11 +303,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#EA7E24',
     padding: 12,
     borderRadius: 8,
-    width: 160,
+    width: 140,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonText: {color: '#fff', fontWeight: 'bold'},
+  buttonText: {color: '#fff', fontSize: 16, fontWeight: 'bold'},
+  ButtonText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
   disabledButton: {opacity: 0.6},
 });
 

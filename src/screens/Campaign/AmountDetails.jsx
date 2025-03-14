@@ -172,12 +172,17 @@ const AmountDetails = ({route}) => {
             <TouchableOpacity
               style={styles.iconButton}
               onPress={handleCameraPicker}>
-              <Icon name="camera-alt" size={22} color="#EA7E24" />
+              <AntDesign
+                name="camera"
+                size={25}
+                color="#EA7E24"
+                style={styles.cameraicon}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconButton}
               onPress={handleImagePicker}>
-              <Icon name="photo-library" size={22} color="#EA7E24" />
+              <Icon name="photo-library" size={25} color="#EA7E24" />
             </TouchableOpacity>
           </View>
           <View style={styles.ImgRow}>
@@ -323,18 +328,20 @@ const styles = StyleSheet.create({
     fontSize: 16,
     backgroundColor: '#fff',
     color: '#333',
-    width: 140,
+    width: 150,
   },
   date: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    gap: 40,
     marginHorizontal: 20,
+  },
+
+  cameraicon: {
+    marginBottom: 5,
   },
   attachRow: {
     position: 'relative',
     flexDirection: 'row',
-
     marginHorizontal: 20,
     marginBottom: 15,
     padding: 10,
@@ -350,19 +357,20 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     backgroundColor: '#FFFFFF',
-    padding: 15,
-    borderRadius: '22.5',
+    padding: 10,
+    borderRadius: 25,
     alignItems: 'center',
+    justifyContent: 'center',
     borderColor: '#EA7E24',
-    marginHorizontal: 10,
+    margin: 10,
     borderWidth: 1,
-    width: 45,
-    height: 45,
-    marginVertical: 7,
+    width: 50,
+    height: 50,
   },
+
   imageGrid: {
     marginHorizontal: 20,
-    marginTop: 10,
+    marginTop: 20,
   },
   imageWrapper: {
     position: 'relative',
