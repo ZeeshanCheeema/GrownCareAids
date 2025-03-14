@@ -88,11 +88,7 @@ const ProfileScreen = () => {
           text="My Profile"
           onPress={() => navigation.navigate('MyProfile')}
         />
-        {/* <MenuItem
-          icon="language"
-          text="Language"
-          onPress={() => navigation.navigate('Language')}
-        /> */}
+
         <MenuItem
           icon="history"
           text="Donation History"

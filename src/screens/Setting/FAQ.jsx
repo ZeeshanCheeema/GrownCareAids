@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   },
   arrow: {
     color: '#fff',
-    fontSize: 22,
+    fontSize: 18,
   },
   answerText: {
     color: '#1A3F1E',

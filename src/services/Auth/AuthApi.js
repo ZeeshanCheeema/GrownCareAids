@@ -66,7 +66,7 @@ export const apiSlice = createApi({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email: String(email)}), // Ensure email is a string
+        body: JSON.stringify({email: String(email)}),
       }),
     }),
 
@@ -157,9 +157,9 @@ export const apiSlice = createApi({
 
     updateCampaign: builder.mutation({
       query: ({id, ...newCampaign}) => ({
-        url: `/updateCampaign/${id}`, // Send ID in URL
+        url: `/updateCampaign/${id}`,
         method: 'PATCH',
-        body: newCampaign, // Send rest of the data in the body
+        body: newCampaign,
       }),
       invalidatesTags: ['Campaign'],
     }),
@@ -236,4 +236,5 @@ export const {
   useGetImageQuery,
   useUploadImageMutation,
   useChangePasswordMutation,
+  useDeleteAccountMutation,
 } = apiSlice;
