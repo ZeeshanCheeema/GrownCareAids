@@ -28,7 +28,7 @@ const MenuItem = ({icon, text, onPress}) => (
 const ProfileScreen = () => {
   const navigation = useNavigation();
   const [logout] = useLogoutMutation();
-  const {data, isLoading, error} = useUserProfileQuery();
+  const {data, isLoading, error, refetch} = useUserProfileQuery();
   const userProfile = data?.data;
   const [isLogoutVisible, setLogoutVisible] = useState(false);
 
@@ -46,10 +46,13 @@ const ProfileScreen = () => {
     return <Loader message="Loading campaigns..." logoSource={logo} />;
   }
 
-  if (error || !userProfile) {
+  if (error) {
     return (
-      <View style={styles.loaderContainer}>
-        <Text style={styles.errorText}>Failed to load profile</Text>
+      <View style={styles.errorContainer}>
+        <Text style={{color: 'red'}}>Error fetching campaigns!</Text>
+        <TouchableOpacity style={styles.refetchButton} onPress={refetch}>
+          <Text style={styles.refetchText}>Retry</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -219,6 +222,17 @@ const styles = StyleSheet.create({
     color: 'red',
     fontWeight: 'bold',
   },
+  refetchButton: {
+    marginTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1A3F1E',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+    width: 130,
+  },
+  refetchText: {color: 'white', fontWeight: 'bold'},
 });
 
 export default ProfileScreen;

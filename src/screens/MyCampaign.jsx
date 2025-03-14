@@ -331,10 +331,13 @@ const styles = StyleSheet.create({
   },
   refetchButton: {
     marginTop: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#1A3F1E',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    width: 130,
   },
   refetchText: {color: 'white', fontWeight: 'bold'},
   tabText: {fontWeight: 'bold', color: '#666'},

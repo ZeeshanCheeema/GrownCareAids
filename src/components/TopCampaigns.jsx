@@ -55,9 +55,12 @@ const TopCampaigns = ({searchQuery = ''}) => {
   }, [data, fetchCampaignImages]);
 
   if (isLoading) {
-    return <Loader message="Loading campaigns..." logoSource={logo} />;
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator size="large" color="#1A3F1E" />
+      </View>
+    );
   }
-
   if (error) {
     return (
       <View style={styles.errorContainer}>
@@ -185,6 +188,9 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 130,
   },
   refetchText: {color: 'white', fontWeight: 'bold'},
   title: {
