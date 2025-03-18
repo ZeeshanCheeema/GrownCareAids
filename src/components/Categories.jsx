@@ -98,10 +98,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: height * 0.12,
   },
-  error: {
+  errorContainer: {
     textAlign: 'center',
+    justifyContent: 'center',
     color: 'red',
     fontSize: width * 0.04,
+    alignItems: 'center',
   },
   refetchButton: {
     marginTop: 15,

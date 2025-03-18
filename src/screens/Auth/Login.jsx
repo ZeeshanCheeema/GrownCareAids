@@ -60,11 +60,11 @@ const Login = () => {
           }),
         );
         if (response.status === 200) {
-          Alert.alert(response?.message);
+          Alert.alert('Success', response?.message);
           navigation.navigate('BottomTab');
         }
       } else {
-        Alert.alert(response?.message);
+        Alert.alert('Error', response?.message);
         setError('Login failed. Please try again.');
       }
     } catch (err) {

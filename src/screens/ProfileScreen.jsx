@@ -207,16 +207,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#333',
   },
-  loaderContainer: {
+  errorContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-  },
-  errorText: {
-    fontSize: 16,
-    color: 'red',
-    fontWeight: 'bold',
   },
   refetchButton: {
     marginTop: 15,
@@ -228,6 +222,8 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     width: 130,
   },
+  refetchText: {color: 'white', fontWeight: 'bold'},
+
   refetchText: {color: 'white', fontWeight: 'bold'},
 });
 

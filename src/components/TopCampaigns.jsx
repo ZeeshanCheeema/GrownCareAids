@@ -177,10 +177,12 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
-  content: {
-    marginTop: 10,
+  errorContainer: {
+    textAlign: 'center',
+    justifyContent: 'center',
+    color: 'red',
+
     alignItems: 'center',
-    paddingHorizontal: 8,
   },
   refetchButton: {
     marginTop: 15,
