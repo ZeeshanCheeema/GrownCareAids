@@ -17,6 +17,7 @@ import {
   useCreateCampaignMutation,
   useUpdateCampaignMutation,
 } from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -203,9 +204,9 @@ const ReviewScreen = ({route}) => {
 
 // Styles
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F9F9F9'},
+  container: {flex: 1, backgroundColor: color.background},
   headerTop: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     height: height * 0.15,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -218,7 +219,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: 'white',
+    color: color.white,
   },
   stepperContainer: {
     flexDirection: 'row',
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
   completedLine: {
     width: width * 0.3,
     height: 3,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: color.grey,
   },
   step: {
     width: 30,
@@ -239,8 +240,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  activeStep: {backgroundColor: '#EA7E24'},
-  stepText: {color: '#fff', fontWeight: 'bold'},
+  activeStep: {backgroundColor: color.secondary},
+  stepText: {color: color.white, fontWeight: 'bold'},
   detailBox: {
     backgroundColor: '#fff',
     padding: 15,
@@ -254,18 +255,18 @@ const styles = StyleSheet.create({
     paddingLeft: 20,
   },
   subTitle: {
-    color: '#858585',
+    color: color.grey,
     fontWeight: 'bold',
   },
   row: {flexDirection: 'row', marginHorizontal: 30},
   labelColumn: {flex: 1},
   valueColumn: {flex: 1},
   label: {
-    color: '#858585',
+    color: color.grey,
     fontWeight: 'bold',
     marginBottom: 15,
   },
-  value: {color: '#000', marginBottom: 15},
+  value: {color: color.black, marginBottom: 15},
   imageSection: {
     width: '90%',
     flexDirection: 'row',
@@ -290,7 +291,7 @@ const styles = StyleSheet.create({
     marginBottom: 40,
   },
   backButtonStyle: {
-    borderColor: '#EA7E24',
+    borderColor: color.aqua,
     padding: 12,
     borderRadius: 8,
     borderWidth: 1,
@@ -300,14 +301,14 @@ const styles = StyleSheet.create({
   },
 
   createButton: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     padding: 12,
     borderRadius: 8,
     width: 140,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonText: {color: '#fff', fontSize: 16, fontWeight: 'bold'},
+  buttonText: {color: color.white, fontSize: 16, fontWeight: 'bold'},
   ButtonText: {
     fontSize: 16,
     fontWeight: 'bold',

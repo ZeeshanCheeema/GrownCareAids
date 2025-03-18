@@ -201,12 +201,15 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   progressBarContainer: {
-    width: '100%',
+    width: '90%',
     height: 7,
     backgroundColor: '#e0e0e0',
     borderRadius: 10,
     marginTop: 8,
     overflow: 'hidden',
+    marginHorizontal: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   progressBarFill: {
     height: '100%',
@@ -219,11 +222,12 @@ const styles = StyleSheet.create({
     color: '#1A3F1E',
     marginTop: 5,
     alignSelf: 'flex-end',
+    marginRight: 10,
   },
   detailsRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginVertical: 8,
+    marginVertical: 13,
     paddingHorizontal: 12,
   },
   label: {
@@ -237,7 +241,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginHorizontal: 12,
     marginTop: 12,
-    width: '80%',
+    width: '50%',
     alignSelf: 'center',
   },
   buttonText: {

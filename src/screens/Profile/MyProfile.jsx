@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from '@react-navigation/native';
 import {useUserProfileQuery} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -146,7 +147,7 @@ const MyProfile = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#fff'},
+  container: {flex: 1, backgroundColor: color.background},
   headerBackground: {
     height: height * 0.25,
     borderBottomRightRadius: 20,
@@ -184,21 +185,22 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: width * 0.06,
     fontWeight: '700',
-    color: 'white',
+    color: color.white,
   },
-  userEmail: {fontSize: width * 0.04, color: 'white'},
+  userEmail: {fontSize: width * 0.04, color: color.white},
 
   infoContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     padding: width * 0.05,
     borderRadius: 15,
     marginHorizontal: width * 0.04,
+    marginVertical: 30,
     marginTop: 10,
   },
   sectionTitle: {
     fontSize: width * 0.06,
     fontWeight: 'bold',
-    color: '#1D4F27',
+    color: color.primarytext,
   },
   infoRow: {
     flexDirection: 'row',
@@ -212,21 +214,22 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   infoText: {
-    fontSize: width * 0.045,
-    color: '#858585',
+    fontSize: width * 0.04,
+    color: color.grey,
     marginLeft: 5,
   },
 
   aboutContainer: {
+    backgroundColor: color.white,
     padding: width * 0.05,
     borderRadius: 15,
     marginHorizontal: width * 0.04,
-    marginTop: -40,
+    marginTop: -20,
   },
-  aboutText: {fontSize: width * 0.04, color: '#555', marginTop: 10},
+  aboutText: {fontSize: width * 0.04, color: color.lightblack, marginTop: 10},
 
   contributionContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     padding: width * 0.05,
     borderRadius: 15,
     marginHorizontal: width * 0.04,
@@ -240,7 +243,7 @@ const styles = StyleSheet.create({
   contributionBox: {
     flex: 1,
     marginTop: 15,
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     paddingVertical: height * 0.05,
     borderRadius: 15,
     alignItems: 'center',
@@ -248,20 +251,20 @@ const styles = StyleSheet.create({
   },
   refetchButton: {
     marginTop: 15,
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
   },
-  refetchText: {color: 'white', fontWeight: 'bold'},
+  refetchText: {color: color.white, fontWeight: 'bold'},
   contributionValue: {
     fontSize: width * 0.05,
     fontWeight: 'bold',
-    color: 'white',
+    color: color.white,
   },
   contributionLabel: {
     fontSize: width * 0.035,
-    color: 'white',
+    color: color.white,
     textAlign: 'center',
   },
   loaderContainer: {
@@ -271,7 +274,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: 'red',
+    color: color.red,
   },
 });
 

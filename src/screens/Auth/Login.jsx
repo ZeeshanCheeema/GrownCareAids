@@ -16,6 +16,7 @@ import {useLoginMutation} from '../../services/Auth/AuthApi';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useDispatch} from 'react-redux';
 import {setCredentials} from '../../services/Auth/AuthReducer';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -50,24 +51,19 @@ const Login = () => {
         loginType: 'email',
       }).unwrap();
 
-      if (response?.data?.access_token) {
+      if (response?.data) {
         await AsyncStorage.setItem('accessToken', response.data.access_token);
-        console.log(response);
-        dispatch(
-          setCredentials({
-            token: response.data.access_token,
-            user: response.user,
-          }),
-        );
+
         if (response.status === 200) {
           Alert.alert('Success', response?.message);
           navigation.navigate('BottomTab');
         }
-      } else {
-        Alert.alert('Error', response?.message);
-        setError('Login failed. Please try again.');
       }
     } catch (err) {
+      setError(
+        'Error',
+        err?.data?.message || 'Login failed. Please try again.',
+      );
       setError(err?.data?.message || 'Login failed. Please try again.');
     }
   };
@@ -180,7 +176,7 @@ const Login = () => {
 const styles = StyleSheet.create({
   container: {flex: 1, backgroundColor: '#fff'},
   headerTop: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     height: height * 0.22,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -190,7 +186,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: '700',
-    color: 'white',
+    color: color.white,
     fontFamily: 'PT Serif',
   },
   logo: {
@@ -204,7 +200,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {paddingHorizontal: 20, marginTop: 40},
   errorText: {
-    color: 'red',
+    color: color.red,
     fontSize: 14,
     marginBottom: 10,
     textAlign: 'center',
@@ -212,30 +208,30 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
   },
-  input: {flex: 1, height: 45, fontSize: 14, color: 'black'},
+  input: {flex: 1, height: 45, fontSize: 14, color: color.black},
   inputIcon: {marginLeft: 10},
   forgotPasswordContainer: {alignSelf: 'flex-end'},
   forgotPassword: {
-    color: '#EA7E24',
+    color: color.secondary,
     fontSize: 14,
     fontWeight: 400,
     lineHeight: 21,
   },
   signInButton: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 12,
     borderRadius: 8,
     marginTop: 15,
   },
-  disabledButton: {backgroundColor: '#ccc'},
+  disabledButton: {backgroundColor: color.aqua},
   signInText: {
-    color: '#fff',
+    color: color.white,
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
@@ -243,7 +239,7 @@ const styles = StyleSheet.create({
   orText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#858585',
+    color: color.grey,
     marginVertical: 15,
   },
   socialButton: {
@@ -255,9 +251,9 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   socialIcon: {width: 24, height: 24, marginHorizontal: 10},
-  socialText: {fontSize: 16, color: '#1A3F1E', textAlign: 'center'},
+  socialText: {fontSize: 16, color: color.primary, textAlign: 'center'},
   signUpText: {fontSize: 14},
-  signUpLink: {color: '#EA7E24', fontWeight: 'bold'},
+  signUpLink: {color: color.secondary, fontWeight: 'bold'},
 });
 
 export default Login;

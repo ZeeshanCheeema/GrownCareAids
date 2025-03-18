@@ -12,6 +12,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useForgetPasswordMutation} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -34,7 +35,7 @@ const ForgetPassword = () => {
     }
 
     try {
-      const response = await forgotPassword({email: String(email)}).unwrap();
+      const response = await forgotPassword({email}).unwrap();
       console.log('Forgot Password Response:', response);
       if (response.status === 200) {
         Alert.alert('Success', response?.message);
@@ -92,10 +93,10 @@ const ForgetPassword = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   headerTop: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     height: height * 0.22,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -113,7 +114,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: '700',
-    color: 'white',
+    color: color.white,
     fontFamily: 'PT Serif',
   },
   logo: {
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 16,
-    color: '#333',
+    color: color.grey,
     textAlign: 'center',
     marginBottom: 10,
   },
@@ -139,7 +140,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   submitButton: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     paddingVertical: 12,
     borderRadius: 8,
     width: '100%',
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   submitText: {
-    color: '#fff',
+    color: color.white,
     fontSize: 16,
     fontWeight: 'bold',
   },

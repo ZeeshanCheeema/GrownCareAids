@@ -12,6 +12,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Picker} from '@react-native-picker/picker';
 import {useGetCategoriesQuery} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -139,9 +140,9 @@ const FundraiserDetails = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F9F9F9'},
+  container: {flex: 1, backgroundColor: color.background},
   headerTop: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     height: height * 0.15,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -154,7 +155,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: 'white',
+    color: color.white,
     textAlign: 'center',
   },
   stepperContainer: {
@@ -167,35 +168,35 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: color.aqua,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  activeStep: {backgroundColor: '#EA7E24'},
-  stepText: {color: '#fff', fontWeight: 'bold'},
-  line: {width: width * 0.25, height: 3, backgroundColor: '#D3D3D3'},
+  activeStep: {backgroundColor: color.secondary},
+  stepText: {color: color.white, fontWeight: 'bold'},
+  line: {width: width * 0.25, height: 3, backgroundColor: color.aqua},
   input: {
     borderWidth: 0.5,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     padding: 15,
     borderRadius: 10,
     marginBottom: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     marginHorizontal: 20,
     width: width * 0.9,
     height: 53,
-    color: '#333',
+    color: color.grey,
   },
   pickerContainer: {
     marginHorizontal: 20,
     borderWidth: 0.5,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderRadius: 10,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     marginBottom: 12,
   },
-  picker: {height: 53, width: 350, color: '#000'},
+  picker: {height: 53, width: 350, color: color.black},
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -203,14 +204,14 @@ const styles = StyleSheet.create({
     marginTop: 90,
   },
   backButtonStyle: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: color.aqua,
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
   },
-  backButtonText: {color: '#333', fontSize: 16, fontWeight: 'bold'},
+  backButtonText: {color: color.white, fontSize: 16, fontWeight: 'bold'},
   continueButton: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
@@ -219,7 +220,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  buttonText: {color: '#fff', fontSize: 16, fontWeight: 'bold'},
+  buttonText: {color: color.white, fontSize: 16, fontWeight: 'bold'},
 });
 
 export default FundraiserDetails;

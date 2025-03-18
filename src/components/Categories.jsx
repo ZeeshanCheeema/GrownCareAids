@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {useGetCategoriesQuery} from '../services/Auth/AuthApi';
+import color from '../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -65,13 +66,13 @@ const styles = StyleSheet.create({
     paddingVertical: height * 0.015,
   },
   categoryCard: {
-    backgroundColor: '#fff',
-    width: width * 0.26, // Responsive Width
-    height: height * 0.12, // Responsive Height
+    backgroundColor: color.white,
+    width: width * 0.26,
+    height: height * 0.12,
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOpacity: 0.2,
     shadowRadius: 4,
     shadowOffset: {width: 0, height: 2},
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: width * 0.03,
-    color: '#1A3F1E',
+    color: color.secondary,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: height * 0.005,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   },
   refetchButton: {
     marginTop: 15,
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 130,
   },
-  refetchText: {color: 'white', fontWeight: 'bold'},
+  refetchText: {color: color.white, fontWeight: 'bold'},
 });
 
 export default Categories;

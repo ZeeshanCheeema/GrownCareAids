@@ -23,6 +23,7 @@ import {
   useUserProfileQuery,
 } from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
+import color from '../utils/color';
 
 const {width} = Dimensions.get('window');
 
@@ -289,9 +290,9 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F9F9F9'},
+  container: {flex: 1, backgroundColor: color.background},
   header: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderBottomRightRadius: 20,
@@ -308,7 +309,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -6,
     right: -5,
-    backgroundColor: 'red',
+    backgroundColor: color.red,
     borderRadius: 10,
     minWidth: 16,
     height: 16,
@@ -316,7 +317,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 4,
   },
-  badgeText: {color: 'white', fontSize: 10, fontWeight: 'bold'},
+  badgeText: {color: color.white, fontSize: 10, fontWeight: 'bold'},
   userImg: {
     width: 45,
     height: 45,
@@ -324,14 +325,14 @@ const styles = StyleSheet.create({
   },
   headerText: {marginTop: 5},
   welcomeText: {
-    color: '#EA7E24',
+    color: color.secondary,
     fontSize: 30,
     fontWeight: '700',
     lineHeight: 39,
     letterSpacing: -0.28,
   },
   subtitle: {
-    color: '#fff',
+    color: color.white,
     fontSize: 20,
     marginTop: 5,
     width: 200,
@@ -340,14 +341,14 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F2F2F2',
+    backgroundColor: color.background,
     borderRadius: 10,
     paddingHorizontal: 15,
     alignItems: 'center',
     marginTop: 15,
     height: 45,
   },
-  searchInput: {flex: 1, fontSize: 16, color: '#333'},
+  searchInput: {flex: 1, fontSize: 16, color: color.grey},
   searchIcon: {padding: 10},
   innerContainer: {marginBottom: 50},
   fundingCard: {margin: 15, width: '100%'},
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
     left: 30,
   },
   fundingTitle: {
-    color: 'white',
+    color: color.white,
     fontSize: 25,
     fontWeight: '700',
     left: 50,
@@ -378,7 +379,7 @@ const styles = StyleSheet.create({
   },
   startButton: {
     width: '70%',
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.red,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -386,11 +387,11 @@ const styles = StyleSheet.create({
     elevation: 5,
     left: 55,
   },
-  startButtonText: {color: 'white', fontSize: 14, fontWeight: 'bold'},
+  startButtonText: {color: color.white, fontSize: 14, fontWeight: 'bold'},
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1A3F1E',
+    color: color.primary,
     marginLeft: 20,
     marginTop: 5,
   },
@@ -400,7 +401,7 @@ const styles = StyleSheet.create({
   searchResultsContent: {paddingBottom: 50},
   campaignCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     borderRadius: 10,
     marginBottom: 15,
     paddingHorizontal: 10,
@@ -412,23 +413,28 @@ const styles = StyleSheet.create({
   campaignTitle: {fontSize: 14, fontWeight: 'bold', marginVertical: 5},
   progressBar: {
     height: 5,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: color.progress,
     borderRadius: 5,
     marginVertical: 5,
     overflow: 'hidden',
   },
-  progressFill: {height: 5, backgroundColor: '#1A3F1E'},
-  progressText: {fontSize: 12, textAlign: 'right', color: '#888', marginTop: 2},
+  progressFill: {height: 5, backgroundColor: color.primary},
+  progressText: {
+    fontSize: 12,
+    textAlign: 'right',
+    color: color.lightblack,
+    marginTop: 2,
+  },
   infoRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 3,
   },
-  infoLabel: {fontSize: 12, color: '#888'},
+  infoLabel: {fontSize: 12, color: color.lightblack},
   infoValue: {fontSize: 12, fontWeight: '600', overflow: 'hidden'},
   infoValueDuration: {
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: color.lightblack,
     width: 70,
     marginRight: 5,
     overflow: 'hidden',
@@ -436,7 +442,7 @@ const styles = StyleSheet.create({
   noDataText: {
     fontSize: 14,
     textAlign: 'center',
-    color: '#858585',
+    color: color.grey,
     marginTop: 20,
   },
 
@@ -446,7 +452,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   notificationDrawer: {
-    backgroundColor: 'white',
+    backgroundColor: color.white,
     padding: 20,
     borderRadius: 10,
     margin: 20,
@@ -459,9 +465,9 @@ const styles = StyleSheet.create({
   },
   notificationTextContainer: {marginLeft: 10},
   notificationText: {fontSize: 16, fontWeight: '500'},
-  notificationDate: {fontSize: 12, color: 'gray'},
+  notificationDate: {fontSize: 12, color: color.gray},
   closeButton: {marginTop: 10, alignSelf: 'center'},
-  closeButtonText: {color: 'red', fontSize: 16},
+  closeButtonText: {color: color.red, fontSize: 16},
 });
 
 export default Home;

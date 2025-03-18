@@ -12,6 +12,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useResetPasswordMutation} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -142,10 +143,10 @@ const NewPassword = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
   },
   headerTop: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     height: height * 0.22,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -163,7 +164,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: '700',
-    color: 'white',
+    color: color.white,
     fontFamily: 'PT Serif',
   },
   logo: {
@@ -181,7 +182,7 @@ const styles = StyleSheet.create({
   },
   instructions: {
     fontSize: 16,
-    color: '#333',
+    color: color.black,
     textAlign: 'center',
     marginBottom: 20,
   },
@@ -189,11 +190,11 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderRadius: 8,
     paddingHorizontal: 15,
     fontSize: 16,
-    color: '#333',
+    color: color.black,
     marginBottom: 15,
   },
   inputContainer: {
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderRadius: 8,
     paddingHorizontal: 10,
     marginBottom: 15,
@@ -210,13 +211,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 50,
     fontSize: 16,
-    color: '#333',
+    color: color.black,
   },
   eyeIcon: {
     padding: 10,
   },
   submitButton: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     paddingVertical: 12,
     borderRadius: 8,
     width: '100%',
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   submitText: {
-    color: '#fff',
+    color: color.white,
     fontSize: 16,
     fontWeight: 'bold',
   },

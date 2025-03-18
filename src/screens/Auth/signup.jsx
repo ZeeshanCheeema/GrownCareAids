@@ -13,6 +13,7 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useSignUpMutation} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -23,7 +24,6 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
   const [error, setError] = useState('');
 
   const [signup, {isLoading}] = useSignUpMutation();
@@ -54,7 +54,7 @@ const Signup = () => {
         password,
       }).unwrap();
 
-      console.log('Signup Response:', response); // Debugging
+      console.log('Signup Response:', response);
 
       if (response?.status === 200 || response?.status === 201) {
         Alert.alert('Success', response.message);
@@ -86,7 +86,7 @@ const Signup = () => {
             <TextInput
               style={styles.input}
               placeholder="First Name"
-              placeholderTextColor={'#858585'}
+              placeholderTextColor={color.grey}
               value={firstName}
               onChangeText={setFirstName}
             />
@@ -95,7 +95,7 @@ const Signup = () => {
             <TextInput
               style={styles.input}
               placeholder="Last Name"
-              placeholderTextColor={'#858585'}
+              placeholderTextColor={color.grey}
               value={lastName}
               onChangeText={setLastName}
             />
@@ -107,7 +107,7 @@ const Signup = () => {
             style={styles.input}
             placeholder="Enter Email"
             value={email}
-            placeholderTextColor={'#858585'}
+            placeholderTextColor={color.grey}
             onChangeText={setEmail}
             keyboardType="email-address"
           />
@@ -117,7 +117,7 @@ const Signup = () => {
           <TextInput
             style={styles.input}
             placeholder="Enter Password"
-            placeholderTextColor={'#858585'}
+            placeholderTextColor={color.grey}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!isPasswordVisible}
@@ -127,7 +127,7 @@ const Signup = () => {
             <Icon
               name={isPasswordVisible ? 'visibility' : 'visibility-off'}
               size={22}
-              color="#858585"
+              color={color.grey}
             />
           </TouchableOpacity>
         </View>
@@ -137,7 +137,7 @@ const Signup = () => {
           onPress={handleSignup}
           disabled={isLoading}>
           {isLoading ? (
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={color.white} />
           ) : (
             <Text style={styles.signInText}>Sign up</Text>
           )}
@@ -163,12 +163,7 @@ const Signup = () => {
           <Text style={styles.socialText}>Continue With Facebook</Text>
         </TouchableOpacity>
 
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'center',
-            marginTop: 10,
-          }}>
+        <View style={styles.footer}>
           <Text style={styles.signUpText}>Already have an account? </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text style={styles.signUpLink}>Login</Text>
@@ -181,22 +176,15 @@ const Signup = () => {
 
 const styles = StyleSheet.create({
   errorText: {
-    color: 'red',
+    color: color.red,
     fontSize: 14,
     marginBottom: 10,
     textAlign: 'center',
   },
-  disabledButton: {backgroundColor: '#ccc'},
-  container: {flex: 1, backgroundColor: '#fff'},
+  disabledButton: {backgroundColor: color.aqua},
+  container: {flex: 1, backgroundColor: color.white},
   headerTop: {
-    backgroundColor: '#1A3F1E',
-    height: height * 0.22,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  headerTop: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     height: height * 0.22,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -205,16 +193,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     paddingHorizontal: 15,
   },
-  backButton: {
-    position: 'absolute',
-    left: 15,
-    top: 10,
-    zIndex: 1,
-  },
   title: {
     fontSize: 25,
     fontWeight: '700',
-    color: 'white',
+    color: color.white,
     fontFamily: 'PT Serif',
   },
   logo: {
@@ -229,15 +211,15 @@ const styles = StyleSheet.create({
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 15,
     marginBottom: 15,
   },
-  input: {flex: 1, height: 45, fontSize: 16, color: '#333'},
+  input: {flex: 1, height: 45, fontSize: 16, color: color.black},
   signInButton: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 12,
     borderRadius: 8,
     marginTop: 15,
@@ -245,7 +227,7 @@ const styles = StyleSheet.create({
   socialButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: color.background,
     paddingVertical: 12,
     borderRadius: 8,
     marginBottom: 15,
@@ -257,23 +239,29 @@ const styles = StyleSheet.create({
   },
   socialText: {
     fontSize: 16,
-    color: '#1A3F1E',
+    color: color.primary,
     textAlign: 'center',
   },
   orText: {
     textAlign: 'center',
     fontSize: 14,
-    color: '#858585',
+    color: color.grey,
     marginVertical: 15,
   },
   signInText: {
-    color: '#fff',
+    color: color.white,
     textAlign: 'center',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  signUpText: {fontSize: 14},
-  signUpLink: {color: '#EA7E24', fontWeight: 'bold'},
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 10,
+    marginBottom: 30,
+  },
+  signUpText: {fontSize: 14, color: color.black, marginBottom: 30},
+  signUpLink: {color: color.secondary, fontWeight: 'bold', marginBottom: 30},
 });
 
 export default Signup;

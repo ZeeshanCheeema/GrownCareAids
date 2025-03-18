@@ -11,7 +11,11 @@ import {
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useResendOtpMutation} from '../../services/Auth/AuthApi'; // ✅ Import API function
+import {
+  useResendOtpMutation,
+  useVerifyOtpMutation,
+} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -19,9 +23,8 @@ const OTPCode = ({route}) => {
   const navigation = useNavigation();
   const [otp, setOtp] = useState(['', '', '', '']);
   const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-
+  const [verifyotp] = useVerifyOtpMutation();
   const [resendOtp, {isLoading}] = useResendOtpMutation();
-
   const email = route?.params?.email;
 
   const handleOtpChange = (index, value) => {
@@ -35,13 +38,20 @@ const OTPCode = ({route}) => {
     }
   };
 
-  const handleOtpSubmit = () => {
+  const handleOtpSubmit = async () => {
     const otpCode = otp.join('');
     if (otpCode.length === 4) {
-      Alert.alert('Success', `OTP Submitted: ${otpCode}`);
-      navigation.navigate('NewPassword');
+      try {
+        await verifyotp({email, otp: otpCode}).unwrap();
+        navigation.navigate('Login');
+      } catch (err) {
+        Alert.alert(
+          'Error',
+          err?.data?.message || 'OTP verification failed, try again.',
+        );
+      }
     } else {
-      Alert.alert('Error', 'Please enter a 4-digit OTP');
+      Alert.alert('Invalid OTP', 'Please enter a 4-digit OTP');
     }
   };
 
@@ -49,13 +59,13 @@ const OTPCode = ({route}) => {
     try {
       const response = await resendOtp({email}).unwrap();
       console.log('Resend OTP Response:', response);
-      if (response.status == 200) {
-        Alert.alert('success', response?.message);
-      } else {
-      }
+      Alert.alert('Success', response?.message || 'OTP resent successfully');
     } catch (err) {
-      console.error('Resend OTP Error:', err); // <-- Log errors
-      alert(err?.data?.message || 'Failed to resend OTP, try again.');
+      console.error('Resend OTP Error:', err);
+      Alert.alert(
+        'Error',
+        err?.data?.message || 'Failed to resend OTP, try again.',
+      );
     }
   };
 
@@ -65,7 +75,7 @@ const OTPCode = ({route}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color="white" />
+          <Icon name="arrow-back" size={24} color={color.white} />
         </TouchableOpacity>
         <Text style={styles.title}>OTP Verification</Text>
         <Image
@@ -83,7 +93,7 @@ const OTPCode = ({route}) => {
         <View style={styles.otpInputContainer}>
           {otp.map((digit, index) => (
             <TextInput
-              placeholderTextColor="#858585"
+              placeholderTextColor={color.grey}
               key={index}
               ref={inputRefs[index]}
               style={styles.otpInput}
@@ -112,10 +122,10 @@ const OTPCode = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   headerTop: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     height: height * 0.22,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -133,7 +143,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: '700',
-    color: 'white',
+    color: color.white,
     fontFamily: 'PT Serif',
   },
   logo: {
@@ -153,7 +163,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
-    color: '#333',
+    color: color.lightblack,
   },
   otpInputContainer: {
     flexDirection: 'row',
@@ -165,7 +175,7 @@ const styles = StyleSheet.create({
     width: 60,
     height: 60,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     textAlign: 'center',
     fontSize: 25,
     borderRadius: 8,
@@ -173,7 +183,7 @@ const styles = StyleSheet.create({
     marginVertical: 30,
   },
   submitButton: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     paddingVertical: 12,
     borderRadius: 8,
     width: '100%',
@@ -181,12 +191,12 @@ const styles = StyleSheet.create({
     marginTop: 250,
   },
   submitText: {
-    color: '#fff',
+    color: color.white,
     fontSize: 16,
     fontWeight: 'bold',
   },
   resendText: {
-    color: '#EA7E24',
+    color: color.secondary,
     fontSize: 14,
     marginTop: 1,
   },

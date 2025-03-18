@@ -23,6 +23,7 @@ import DonationModal from './DonateModel';
 import {useSelector} from 'react-redux';
 import logo from '../assets/logo.png';
 import Loader from './Loader';
+import color from '../utils/color';
 const SearchViewCampaign = () => {
   const navigation = useNavigation();
   const route = useRoute();
@@ -276,7 +277,7 @@ const SearchViewCampaign = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: color.background,
   },
   loader: {
     flex: 1,
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   error: {
-    color: 'red',
+    color: color.red,
     textAlign: 'center',
     marginTop: 20,
   },
@@ -323,10 +324,10 @@ const styles = StyleSheet.create({
   },
   detailsContainer: {
     padding: 15,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     borderRadius: 10,
     margin: 10,
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
@@ -335,11 +336,11 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 10,
-    color: '#1A3F1E',
+    color: color.primarytext,
   },
   campaignDescription: {
     fontSize: 14,
-    color: '#666',
+    color: color.lightblack,
     marginBottom: 20,
   },
   infoRow: {
@@ -349,37 +350,37 @@ const styles = StyleSheet.create({
   },
   fundLabel: {
     fontSize: 14,
-    color: '#333',
+    color: color.grey,
     fontWeight: '600',
   },
   infoValues: {
     fontSize: 14,
-    color: '#777',
+    color: color.lightblack,
   },
   progressText: {
     fontSize: 14,
-    color: '#1A3F1E',
+    color: color.primarytext,
     marginBottom: 5,
   },
   progressBar: {
     height: 6,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: color.progress,
     borderRadius: 3,
     overflow: 'hidden',
     marginBottom: 20,
   },
   progress: {
     height: '100%',
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
   },
   donorsTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1A3F1E',
+    color: color.primarytext,
     marginBottom: 10,
   },
   donorItem: {
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     padding: 15,
     marginVertical: 10,
     borderRadius: 12,
@@ -399,7 +400,7 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     overflow: 'hidden',
     marginRight: 10,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: color.background,
   },
   donorProfileImage: {
     width: '100%',
@@ -413,11 +414,11 @@ const styles = StyleSheet.create({
   donorName: {
     fontSize: 16,
     fontWeight: '500',
-    color: '#333',
+    color: color.black,
   },
   donorEmail: {
     fontSize: 14,
-    color: '#777',
+    color: color.lightblack,
   },
   donationDetails: {
     flexDirection: 'row',
@@ -426,27 +427,27 @@ const styles = StyleSheet.create({
   },
   donationText: {
     fontSize: 14,
-    color: '#666',
+    color: color.lightblack,
   },
   amount: {
     fontSize: 14,
     fontWeight: 'bold',
-    color: '#1A3F1E',
+    color: color.primary,
   },
   noDonorsText: {
     textAlign: 'center',
-    color: '#777',
+    color: color.lightblack,
     marginVertical: 20,
   },
   submitButton: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
   },
   submitText: {
-    color: 'white',
+    color: color.white,
     fontWeight: '600',
   },
   modalContainer: {
@@ -456,7 +457,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.4)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: color.white,
     borderRadius: 16,
     width: '90%',
     padding: 20,
@@ -464,12 +465,12 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1A3F1E',
+    color: color.primarytext,
     marginBottom: 10,
   },
   modalSubtitle: {
     fontSize: 14,
-    color: '#666',
+    color: color.lightblack,
     marginBottom: 20,
   },
   reasonItem: {
@@ -478,11 +479,11 @@ const styles = StyleSheet.create({
     padding: 12,
     borderRadius: 8,
     marginBottom: 12,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: color.background,
   },
   selectedReasonItem: {
     backgroundColor: '#E3FCEF',
-    borderColor: '#1A3F1E',
+    borderColor: color.primary,
     borderWidth: 1,
   },
   reasonText: {

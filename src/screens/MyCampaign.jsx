@@ -22,6 +22,7 @@ import {
 import {useDispatch} from 'react-redux';
 import logo from '../assets/logo.png';
 import Loader from '../components/Loader';
+import color from '../utils/color';
 const {width} = Dimensions.get('window');
 
 const Mycampaign = () => {
@@ -253,12 +254,12 @@ const Mycampaign = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F9F9F9', marginBottom: 70},
+  container: {flex: 1, backgroundColor: color.background, marginBottom: 70},
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: color.background,
   },
   logo: {
     width: 100,
@@ -271,12 +272,12 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#EA7E24',
+    color: color.primarytext,
     fontWeight: 'bold',
   },
   errorContainer: {flex: 1, justifyContent: 'center', alignItems: 'center'},
   header: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 25,
     paddingHorizontal: 20,
     borderBottomRightRadius: 20,
@@ -291,7 +292,7 @@ const styles = StyleSheet.create({
   userImg: {width: 40, height: 40, borderRadius: 20},
   searchContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F2F2F2',
+    backgroundColor: color.background,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 15,
@@ -302,7 +303,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -20,
   },
-  searchInput: {flex: 1, fontSize: 16, color: '#333'},
+  searchInput: {flex: 1, fontSize: 16, color: color.lightblack},
   searchIcon: {padding: 10},
 
   tabContainer: {
@@ -367,11 +368,11 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginTop: 5,
   },
-  progressFill: {height: 5, backgroundColor: '#1A3F1E'},
+  progressFill: {height: 5, backgroundColor: color.primary},
   noDataText: {
     fontSize: 14,
     textAlign: 'center',
-    color: '#858585',
+    color: color.grey,
     marginTop: 20,
     width: 100,
   },
@@ -380,12 +381,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     margin: 5,
   },
-  infoLabel: {fontSize: 12, color: '#888'},
+  infoLabel: {fontSize: 12, color: color.lightblack},
   infoValue: {
     fontSize: 14,
-    color: '#777',
+    color: color.lightblack,
   },
-  infoValueDate: {width: 80, color: '#858585'},
+  infoValueDate: {width: 80, color: color.grey},
 });
 
 export default Mycampaign;

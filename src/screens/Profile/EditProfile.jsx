@@ -23,6 +23,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import logo from '../../assets/logo.png';
 import Loader from '../../components/Loader';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -196,11 +197,11 @@ const EditProfileScreen = () => {
           <TouchableOpacity
             style={styles.backIcon}
             onPress={() => navigation.goBack()}>
-            <Icon name="arrow-back" size={24} color="white" />
+            <Icon name="arrow-back" size={24} color={color.white} />
           </TouchableOpacity>
 
           <TouchableOpacity style={styles.editIcon} onPress={handleImagePick}>
-            <Icon name="camera" size={22} color="white" />
+            <Icon name="camera" size={22} color={color.white} />
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -208,21 +209,21 @@ const EditProfileScreen = () => {
       <View style={styles.formContainer}>
         <TextInput
           style={styles.input}
-          placeholderTextColor={'#858585'}
+          placeholderTextColor={color.grey}
           placeholder="First Name"
           value={user.firstName}
           onChangeText={text => handleInputChange('firstName', text)}
         />
         <TextInput
           style={styles.input}
-          placeholderTextColor={'#858585'}
+          placeholderTextColor={color.grey}
           placeholder="Last Name"
           value={user.lastName}
           onChangeText={text => handleInputChange('lastName', text)}
         />
         <TextInput
           style={styles.input}
-          placeholderTextColor={'#858585'}
+          placeholderTextColor={color.grey}
           placeholder="dob"
           value={user.dob}
           keyboardType="phone-pad"
@@ -230,7 +231,7 @@ const EditProfileScreen = () => {
         />
         <TextInput
           style={styles.input}
-          placeholderTextColor={'#858585'}
+          placeholderTextColor={color.grey}
           placeholder="Phone"
           value={user.phone}
           keyboardType="phone-pad"
@@ -245,7 +246,7 @@ const EditProfileScreen = () => {
             {label: 'Other', value: 'other'},
           ]}
           value={user.gender}
-          placeholder={{label: 'Select Gender', value: null, color: '#858585'}}
+          placeholder={{label: 'Select Gender', value: null, color: color.grey}}
           style={{
             inputAndroid: {
               fontSize: 16,
@@ -296,7 +297,7 @@ const EditProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: color.background,
   },
   headerBackground: {
     height: height * 0.25,
@@ -330,21 +331,21 @@ const styles = StyleSheet.create({
   input: {
     height: 50,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderRadius: 8,
     paddingHorizontal: 10,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     marginBottom: 12,
   },
   saveButton: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 12,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 10,
   },
   saveButtonText: {
-    color: 'white',
+    color: color.white,
     fontSize: 16,
     fontWeight: 'bold',
   },

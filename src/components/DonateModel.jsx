@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {useDonateMutation} from '../services/Auth/AuthApi';
+import color from '../utils/color';
 
 const DonationModal = ({visible, onClose, campaignId, onSuccess}) => {
   const [selectedAmount, setSelectedAmount] = useState(null);
@@ -155,7 +156,7 @@ const styles = StyleSheet.create({
   amountButton: {
     padding: 10,
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     borderRadius: 5,
     margin: 5,
     minWidth: 70,

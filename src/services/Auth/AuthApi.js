@@ -66,18 +66,18 @@ export const apiSlice = createApi({
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email: String(email)}),
+        body: email,
       }),
     }),
 
     forgetPassword: builder.mutation({
-      query: ({email}) => ({
+      query: email => ({
         url: '/forgotPassword',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({email: String(email)}),
+        body: email,
       }),
     }),
 

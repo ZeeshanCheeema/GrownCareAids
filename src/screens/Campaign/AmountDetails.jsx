@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker';
+import color from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -255,10 +256,10 @@ export default AmountDetails;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9F9F9',
+    backgroundColor: color.background,
   },
   headerTop: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     height: height * 0.15,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -275,7 +276,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 22,
     fontWeight: 'bold',
-    color: 'white',
+    color: color.white,
   },
   stepperContainer: {
     flexDirection: 'row',
@@ -287,47 +288,47 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: color.grey,
     alignItems: 'center',
     justifyContent: 'center',
   },
   activeStep: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
   },
   stepText: {
-    color: '#fff',
+    color: color.white,
     fontWeight: 'bold',
   },
   line: {
     width: width * 0.25,
     height: 3,
-    backgroundColor: '#D3D3D3',
+    backgroundColor: color.grey,
   },
   activeLine: {
     width: width * 0.25,
     height: 3,
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     padding: 15,
     borderRadius: 10,
     marginBottom: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     marginHorizontal: 20,
-    color: '#333',
+    color: color.lightblack,
   },
   dateinput: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     padding: 15,
     borderRadius: 10,
     marginBottom: 12,
     fontSize: 16,
-    backgroundColor: '#fff',
-    color: '#333',
+    backgroundColor: color.white,
+    color: color.lightblack,
     width: 150,
   },
   date: {
@@ -345,7 +346,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 15,
     padding: 10,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: color.white,
     borderRadius: 10,
     elevation: 2,
   },
@@ -356,12 +357,12 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   iconButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: color.white,
     padding: 10,
     borderRadius: 25,
     alignItems: 'center',
     justifyContent: 'center',
-    borderColor: '#EA7E24',
+    borderColor: color.secondary,
     margin: 10,
     borderWidth: 1,
     width: 50,
@@ -396,7 +397,7 @@ const styles = StyleSheet.create({
   },
   textArea: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: color.aqua,
     padding: 15,
     borderRadius: 10,
     marginBottom: 12,
@@ -404,11 +405,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: 20,
     height: 100,
-    color: '#333',
+    color: color.lightblack,
   },
   placeholderText: {
     textAlign: 'center',
-    color: '#858585',
+    color: color.grey,
     fontSize: 14,
     marginTop: 10,
   },
@@ -419,24 +420,24 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
   backButtonStyle: {
-    backgroundColor: '#E0E0E0',
+    backgroundColor: color.aqua,
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
   },
   backButtonText: {
-    color: '#333',
+    color: color.black,
     fontSize: 16,
     fontWeight: 'bold',
   },
   continueButton: {
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.secondary,
     paddingVertical: 12,
     paddingHorizontal: 25,
     borderRadius: 8,
   },
   buttonText: {
-    color: '#fff',
+    color: color.white,
     fontSize: 16,
     fontWeight: 'bold',
   },

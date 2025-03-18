@@ -3,6 +3,7 @@ import {StyleSheet, View, StatusBar} from 'react-native';
 import {Provider} from 'react-redux';
 import Routes from './src/Routes/routes';
 import store from './src/services/store';
+import color from './src/utils/color';
 
 const App = () => {
   return (
@@ -10,7 +11,7 @@ const App = () => {
       <View style={{flex: 1}}>
         <StatusBar
           barStyle="light-content"
-          backgroundColor="#1A3F1E"
+          backgroundColor={color.primary}
           translucent={false}
         />
         <Routes />

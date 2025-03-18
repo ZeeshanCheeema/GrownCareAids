@@ -16,6 +16,7 @@ import Logout from './Auth/Logout';
 
 import logo from '../assets/logo.png';
 import Loader from '../components/Loader';
+import color from '../utils/color';
 
 const MenuItem = ({icon, text, onPress}) => (
   <TouchableOpacity style={styles.menuItem} onPress={onPress}>
@@ -78,7 +79,7 @@ const ProfileScreen = () => {
         <TouchableOpacity
           style={styles.editIcon}
           onPress={() => navigation.navigate('EditProfile', {userProfile})}>
-          <Icon name="edit" size={18} color="white" />
+          <Icon name="edit" size={18} color={color.white} />
         </TouchableOpacity>
       </View>
 
@@ -135,18 +136,18 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F5F5F5',
+    backgroundColor: color.background,
     marginBottom: 90,
   },
   header: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 40,
     paddingHorizontal: 20,
     alignItems: 'center',
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
     elevation: 5,
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.2,
     shadowRadius: 3,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     height: 90,
     borderRadius: 45,
     borderWidth: 2,
-    borderColor: 'white',
+    borderColor: color.white,
   },
   userInfo: {
     marginTop: 10,
@@ -165,7 +166,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: 'white',
+    color: color.white,
     marginTop: 5,
   },
   userEmail: {
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 30,
     right: 20,
-    backgroundColor: '#EA7E24',
+    backgroundColor: color.primary,
     padding: 8,
     borderRadius: 10,
   },
@@ -189,11 +190,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 16,
     paddingHorizontal: 20,
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     borderRadius: 10,
     marginHorizontal: 15,
     marginVertical: 6,
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.1,
     shadowRadius: 2,
@@ -205,7 +206,7 @@ const styles = StyleSheet.create({
   menuText: {
     flex: 1,
     fontSize: 16,
-    color: '#333',
+    color: color.primarytext,
   },
   errorContainer: {
     flex: 1,
@@ -216,15 +217,15 @@ const styles = StyleSheet.create({
     marginTop: 15,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
     width: 130,
   },
-  refetchText: {color: 'white', fontWeight: 'bold'},
+  refetchText: {color: color.white, fontWeight: 'bold'},
 
-  refetchText: {color: 'white', fontWeight: 'bold'},
+  refetchText: {color: color.white, fontWeight: 'bold'},
 });
 
 export default ProfileScreen;
