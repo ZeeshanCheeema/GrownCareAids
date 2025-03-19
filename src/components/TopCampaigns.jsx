@@ -14,6 +14,7 @@ import {useGetAllCampaignsQuery, apiSlice} from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
 import Loader from './Loader';
 import logo from '../assets/logo.png';
+import color from '../utils/color';
 
 const TopCampaigns = ({searchQuery = ''}) => {
   const navigation = useNavigation();
@@ -162,9 +163,9 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     borderRadius: 12,
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOpacity: 0.15,
     shadowRadius: 6,
     elevation: 5,
@@ -180,13 +181,13 @@ const styles = StyleSheet.create({
   errorContainer: {
     textAlign: 'center',
     justifyContent: 'center',
-    color: 'red',
+    color: color.red,
 
     alignItems: 'center',
   },
   refetchButton: {
     marginTop: 15,
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -194,16 +195,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: 130,
   },
-  refetchText: {color: 'white', fontWeight: 'bold'},
+  refetchText: {color: color.white, fontWeight: 'bold'},
   title: {
     fontWeight: '600',
-    color: '#1A3F1E',
+    color: color.primary,
     textAlign: 'center',
   },
   progressBarContainer: {
     width: '90%',
     height: 7,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: color.progress,
     borderRadius: 10,
     marginTop: 8,
     overflow: 'hidden',
@@ -213,13 +214,13 @@ const styles = StyleSheet.create({
   },
   progressBarFill: {
     height: '100%',
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     borderRadius: 10,
   },
   percentage: {
     fontSize: 12,
     fontWeight: '500',
-    color: '#1A3F1E',
+    color: color.primary,
     marginTop: 5,
     alignSelf: 'flex-end',
     marginRight: 10,
@@ -232,10 +233,10 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 12,
-    color: '#777',
+    color: color.lightblack,
   },
   button: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     borderRadius: 8,
     alignItems: 'center',
     justifyContent: 'center',
@@ -245,7 +246,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   buttonText: {
-    color: '#fff',
+    color: color.white,
     fontWeight: '500',
   },
   loader: {
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
   noResults: {
     textAlign: 'center',
     fontSize: 16,
-    color: '#777',
+    color: color.lightblack,
     marginTop: 20,
   },
 });

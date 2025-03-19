@@ -20,6 +20,7 @@ import {
   useUserProfileQuery,
 } from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
+import color from '../utils/color';
 
 const {width} = Dimensions.get('window');
 
@@ -197,9 +198,9 @@ const Search = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#F9F9F9', marginBottom: 60},
+  container: {flex: 1, backgroundColor: color.background, marginBottom: 60},
   header: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     paddingVertical: 25,
     paddingHorizontal: 20,
     borderBottomRightRadius: 20,
@@ -214,7 +215,7 @@ const styles = StyleSheet.create({
   userImg: {width: 40, height: 40, borderRadius: 20},
   searchContainer: {
     flexDirection: 'row',
-    backgroundColor: '#F2F2F2',
+    backgroundColor: color.white,
     borderRadius: 10,
     alignItems: 'center',
     marginTop: 15,
@@ -225,15 +226,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: -20,
   },
-  searchInput: {flex: 1, fontSize: 16, color: '#333'},
+  searchInput: {flex: 1, fontSize: 16, color: color.lightblack},
   searchIcon: {padding: 10},
   content: {padding: 20, marginTop: 30},
   campaignCard: {
     flexDirection: 'row',
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     borderRadius: 10,
     marginBottom: 15,
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOpacity: 0.1,
     shadowRadius: 5,
     elevation: 3,
@@ -250,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginVertical: 3,
   },
-  infoLabel: {fontSize: 12, color: '#888'},
+  infoLabel: {fontSize: 12, color: color.lightblack},
   infoValue: {
     fontSize: 12,
     fontWeight: '600',
@@ -265,21 +266,26 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 5,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: color.progress,
     borderRadius: 5,
     overflow: 'hidden',
     marginVertical: 5,
   },
-  progressFill: {height: 5, backgroundColor: '#1A3F1E'},
-  progressText: {fontSize: 12, textAlign: 'right', color: '#888', marginTop: 2},
+  progressFill: {height: 5, backgroundColor: color.primary},
+  progressText: {
+    fontSize: 12,
+    textAlign: 'right',
+    color: color.primary,
+    marginTop: 2,
+  },
   noDataText: {
     fontSize: 14,
     textAlign: 'center',
-    color: '#858585',
+    color: color.grey,
     marginTop: 20,
   },
   loader: {marginTop: 50},
-  error: {color: 'red', textAlign: 'center', marginTop: 20},
+  error: {color: color.red, textAlign: 'center', marginTop: 20},
 });
 
 export default Search;

@@ -9,7 +9,7 @@ const color = {
   grey: '#858585',
   red: '#EA7E24',
   progress: '#e0e0e0',
-  lightblack: '#888',
+  lightblack: '#666',
   aqua: '#ccc',
 };
 

@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import img1 from '../assets/img1.png';
 import img2 from '../assets/img2.png';
 import img3 from '../assets/img3.png';
+import color from '../utils/color';
 
 const {width, height} = Dimensions.get('window');
 
@@ -99,25 +100,25 @@ export default OnboardingScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
   },
   slide: {
     flex: 0.6,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
   },
   image: {
     width: width * 0.9,
     height: height * 0.45,
     resizeMode: 'contain',
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
   },
   bottomContainer: {
     position: 'absolute',
     bottom: height * 0.12,
     width: '100%',
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
     padding: width * 0.05,
@@ -131,13 +132,13 @@ const styles = StyleSheet.create({
   title: {
     fontSize: width * 0.07,
     fontWeight: '700',
-    color: '#1A3F1E',
+    color: color.primary,
     marginBottom: height * 0.01,
   },
   text: {
     textAlign: 'center',
     fontSize: width * 0.04,
-    color: '#858585',
+    color: color.grey,
     marginBottom: height * 0.03,
     paddingHorizontal: width * 0.05,
     fontWeight: '400',
@@ -153,18 +154,18 @@ const styles = StyleSheet.create({
     width: width * 0.035,
     height: width * 0.035,
     borderRadius: width * 0.0175,
-    backgroundColor: '#ccc',
+    backgroundColor: color.aqua,
     marginHorizontal: width * 0.02,
     marginTop: height * 0.04,
   },
   activeDot: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     marginTop: height * 0.04,
   },
   nextButton: {
     width: width * 0.9,
     height: height * 0.06,
-    backgroundColor: 'white',
+    backgroundColor: color.white,
     paddingVertical: height * 0.015,
     borderRadius: width * 0.02,
     alignItems: 'center',
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   nextButtonText: {
-    color: '#1A3F1E',
+    color: color.primary,
     fontSize: width * 0.05,
     fontWeight: 'bold',
   },

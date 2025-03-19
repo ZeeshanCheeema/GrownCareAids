@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   StyleSheet,
 } from 'react-native';
+import color from '../utils/color';
 
 const Loader = ({message = 'Loading...', logoSource}) => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -33,7 +34,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: color.background,
   },
   logo: {
     width: 300,
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   },
   loadingText: {
     fontSize: 16,
-    color: '#EA7E24',
+    color: color.secondary,
     fontWeight: 'bold',
   },
 });

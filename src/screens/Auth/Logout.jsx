@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: '500',
-    color: color.pecondarytext,
+    color: color.white,
   },
   userName: {
     marginTop: 30,

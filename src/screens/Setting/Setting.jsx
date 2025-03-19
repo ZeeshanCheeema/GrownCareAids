@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, Text, TouchableOpacity, StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import color from '../../utils/color';
 
 const SettingsScreen = ({navigation}) => {
   return (
@@ -43,7 +44,7 @@ const SettingsScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
     padding: 20,
   },
   backButton: {
@@ -57,12 +58,12 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-    color: 'black',
+    color: color.black,
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
     padding: 15,
     borderRadius: 10,
     marginBottom: 10,
@@ -76,14 +77,14 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 14,
-    color: '#333',
+    color: color.lightblack,
     fontWeight: '600',
   },
   deleteItem: {
-    backgroundColor: '#fff',
+    backgroundColor: color.white,
   },
   deleteText: {
-    color: 'black',
+    color: color.black,
   },
 });
 

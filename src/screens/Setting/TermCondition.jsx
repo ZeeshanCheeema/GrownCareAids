@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import color from '../../utils/color';
 
 const TermCondition = ({navigation}) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -68,14 +69,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   header: {
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
-    color: '#1a3c20',
+    color: color.primary,
   },
   backButton: {
     position: 'absolute',
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   item: {
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
     borderRadius: 12,
     marginBottom: 12,
     padding: 16, // More padding for better spacing
@@ -92,14 +93,14 @@ const styles = StyleSheet.create({
     borderColor: '#E0E0E0',
 
     elevation: 4,
-    shadowColor: '#000',
+    shadowColor: color.black,
     shadowOffset: {width: 0, height: 3},
     shadowOpacity: 0.15,
     shadowRadius: 6,
   },
 
   expandedItem: {
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   questionContainer: {
     flexDirection: 'row',
@@ -110,27 +111,27 @@ const styles = StyleSheet.create({
   questionText: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#1A3F1E',
+    color: color.primary,
     flexWrap: 'wrap',
-    width: 280,
+    width: 260,
   },
   arrow: {
     fontSize: 16,
     color: '#fff',
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.primary,
     width: 25,
     height: 25,
-    display: 'flex', // Ensure Flexbox is applied
-    justifyContent: 'center', // Center vertically
-    alignItems: 'center', // Center horizontally
-    textAlign: 'center', // Center text (needed for <Text> elements)
-    borderRadius: 12.5, // Make it a circle (optional)
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    borderRadius: 12.5,
   },
 
   answerText: {
     fontSize: 14,
     marginTop: 10,
-    color: '##000000',
+    color: color.black,
     lineHeight: 21,
     letterSpacing: -0.28,
   },

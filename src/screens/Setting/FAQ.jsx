@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity, FlatList, StyleSheet} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import color from '../../utils/color';
 
 const FAQ = ({navigation}) => {
   const [expandedIndex, setExpandedIndex] = useState(null);
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   header: {
     fontSize: 22,
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   faqItem: {
-    backgroundColor: '#1A3F1E',
+    backgroundColor: color.secondary,
     borderRadius: 25,
     marginBottom: 10,
     padding: 15,
@@ -105,18 +106,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   questionText: {
-    color: '#fff',
+    color: color.white,
     fontSize: 16,
     fontWeight: 'bold',
     flex: 1,
   },
   arrow: {
-    color: '#fff',
+    color: color.white,
     fontSize: 18,
   },
   answerText: {
-    color: '#1A3F1E',
-    backgroundColor: '#fff',
+    color: color.secondary,
+    backgroundColor: color.white,
     fontSize: 14,
     marginTop: 10,
     padding: 5,

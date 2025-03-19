@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useMyDonationHistoryQuery} from '../../services/Auth/AuthApi';
+import color from '../../utils/color';
 
 const DonationHistoryScreen = ({navigation}) => {
   const [expandedId, setExpandedId] = useState(null);
@@ -148,7 +149,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   loaderContainer: {
     flex: 1,
@@ -162,7 +163,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 16,
-    color: 'red',
+    color: color.red,
   },
   header: {
     flexDirection: 'row',
@@ -177,7 +178,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f1f1f1',
+    backgroundColor: color.white,
     borderRadius: 10,
     paddingHorizontal: 15,
     marginVertical: 10,
@@ -185,10 +186,10 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     paddingVertical: 8,
-    color: 'black',
+    color: color.black,
   },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
     borderRadius: 10,
     padding: 15,
     marginBottom: 10,
@@ -201,7 +202,7 @@ const styles = StyleSheet.create({
   },
   description: {
     fontSize: 12,
-    color: '#666',
+    color: color.lightblack,
     marginBottom: 5,
   },
   row: {
@@ -211,13 +212,13 @@ const styles = StyleSheet.create({
   },
   progressBar: {
     height: 6,
-    backgroundColor: '#ddd',
+    backgroundColor: color.progress,
     borderRadius: 5,
     marginVertical: 5,
   },
   progressFill: {
     height: '100%',
-    backgroundColor: '#1a3c20',
+    backgroundColor: color.primary,
     borderRadius: 5,
   },
   expandIcon: {

@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import color from '../../utils/color';
 
 const PrivacyPolicyScreen = ({navigation}) => {
   return (
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: color.background,
   },
   backButton: {
     position: 'absolute',
@@ -61,12 +62,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     textAlign: 'center',
-    color: '#1a3c20',
+    color: color.primary,
     marginBottom: 20,
   },
   content: {
     fontSize: 14,
-    color: '#333',
+    color: color.lightblack,
     textAlign: 'justify',
   },
 });
