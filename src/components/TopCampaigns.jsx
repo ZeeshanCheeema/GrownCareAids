@@ -12,8 +12,6 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import {useGetAllCampaignsQuery, apiSlice} from '../services/Auth/AuthApi';
 import {useDispatch} from 'react-redux';
-import Loader from './Loader';
-import logo from '../assets/logo.png';
 import color from '../utils/color';
 
 const TopCampaigns = ({searchQuery = ''}) => {
@@ -200,6 +198,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: color.primary,
     textAlign: 'center',
+    paddingTop: 5,
   },
   progressBarContainer: {
     width: '90%',
@@ -209,8 +208,6 @@ const styles = StyleSheet.create({
     marginTop: 8,
     overflow: 'hidden',
     marginHorizontal: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   progressBarFill: {
     height: '100%',

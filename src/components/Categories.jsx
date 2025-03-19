@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: width * 0.03,
-    color: color.secondary,
+    color: color.primary,
     fontWeight: 'bold',
     textAlign: 'center',
     marginTop: height * 0.005,

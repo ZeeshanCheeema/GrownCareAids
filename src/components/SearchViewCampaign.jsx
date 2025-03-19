@@ -30,6 +30,7 @@ const SearchViewCampaign = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedReason, setSelectedReason] = useState(null);
   const [donationModalVisible, setDonationModalVisible] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
   const toggleModal = useCallback(() => setModalVisible(prev => !prev), []);
   const userId = useSelector(state => state.data?._id); // Adjust this according to your state structure
@@ -148,9 +149,18 @@ const SearchViewCampaign = () => {
 
       <View style={styles.detailsContainer}>
         <Text style={styles.campaignTitle}>{item.title}</Text>
-        <Text style={styles.campaignDescription} numberOfLines={4}>
+        <Text
+          style={styles.campaignDescription}
+          numberOfLines={expanded ? undefined : 5}>
           {item.description}
         </Text>
+        {item.description.length > 200 && ( // Adjust condition based on content length
+          <TouchableOpacity onPress={() => setExpanded(!expanded)}>
+            <Text style={styles.seeMoreText}>
+              {expanded ? 'See Less' : 'See More'}
+            </Text>
+          </TouchableOpacity>
+        )}
 
         {/* Fund Details */}
         <View style={styles.infoRow}>
@@ -315,6 +325,15 @@ const styles = StyleSheet.create({
     padding: 8,
     borderRadius: 10,
     zIndex: 10,
+  },
+  campaignDescription: {
+    fontSize: 14,
+    color: color.primary,
+  },
+  seeMoreText: {
+    color: color.primary,
+    marginTop: -15,
+    marginBottom: 20,
   },
   campaignImage: {
     width: '100%',
