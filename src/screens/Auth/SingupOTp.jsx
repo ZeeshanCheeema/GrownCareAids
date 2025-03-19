@@ -1,8 +1,7 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   Image,
@@ -15,7 +14,7 @@ import {
   useResendOtpMutation,
   useVerifyOtpMutation,
 } from '../../services/Auth/AuthApi';
-
+import OtpInputs from 'react-native-otp-inputs';
 import colors from '../../utils/color';
 
 const {width, height} = Dimensions.get('window');
@@ -24,29 +23,27 @@ const SignupOtp = () => {
   const navigation = useNavigation();
   const route = useRoute();
   const email = route.params?.email;
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const inputRefs = Array(4)
-    .fill()
-    .map(() => useRef(null));
+  const [otp, setOtp] = useState('');
   const [verifyotp, {isLoading}] = useVerifyOtpMutation();
   const [resendOtp] = useResendOtpMutation();
 
-  const handleOtpChange = (index, value) => {
-    if (!/^[0-9]?$/.test(value)) return;
-    const newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    if (value && index < 3) {
-      inputRefs[index + 1].current.focus();
+  // Handle OTP updates safely
+  const handleOtpChange = code => {
+    if (code.length <= 4) {
+      setOtp(code);
     }
   };
 
+  useEffect(() => {
+    if (otp.length === 4) {
+      handleOtpSubmit();
+    }
+  }, [otp]);
+
   const handleOtpSubmit = async () => {
-    const otpCode = otp.join('');
-    if (otpCode.length === 4) {
+    if (otp.length === 4) {
       try {
-        await verifyotp({email, otp: otpCode}).unwrap();
+        await verifyotp({email, otp}).unwrap();
         navigation.navigate('Login');
       } catch (err) {
         Alert.alert(
@@ -54,18 +51,16 @@ const SignupOtp = () => {
           err?.data?.message || 'OTP verification failed, try again.',
         );
       }
-    } else {
-      Alert.alert('Invalid OTP', 'Please enter a 4-digit OTP');
     }
   };
 
   const handleResendOtp = async () => {
     try {
       const response = await resendOtp({email}).unwrap();
-      if (response?.status === 200) {
-        Alert.alert('Success', response?.message);
-      }
+      console.log('Resend OTP Response:', response);
+      Alert.alert('Success', response?.message || 'OTP resent successfully');
     } catch (err) {
+      console.error('Resend OTP Error:', err);
       Alert.alert(
         'Error',
         err?.data?.message || 'Failed to resend OTP, try again.',
@@ -81,7 +76,7 @@ const SignupOtp = () => {
           style={styles.backButton}>
           <Icon name="arrow-back" size={24} color={colors.white} />
         </TouchableOpacity>
-        <Text style={styles.title}>OTP verification</Text>
+        <Text style={styles.title}>OTP Verification</Text>
         <Image
           source={require('../../assets/logoSmall.png')}
           style={styles.logo}
@@ -95,17 +90,12 @@ const SignupOtp = () => {
         </Text>
 
         <View style={styles.otpInputContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              key={index}
-              ref={inputRefs[index]}
-              style={styles.otpInput}
-              maxLength={1}
-              keyboardType="numeric"
-              value={digit}
-              onChangeText={value => handleOtpChange(index, value)}
-            />
-          ))}
+          <OtpInputs
+            handleChange={handleOtpChange}
+            numberOfInputs={4}
+            style={styles.otpInputContainer}
+            inputStyles={styles.input}
+          />
         </View>
 
         <TouchableOpacity onPress={handleResendOtp}>
@@ -174,21 +164,24 @@ const styles = StyleSheet.create({
   otpInputContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     marginHorizontal: 30,
     marginBottom: 20,
   },
-  otpInput: {
-    width: 60,
+
+  input: {
+    width: 50,
     height: 60,
-    borderWidth: 1,
+    fontSize: 24,
+    borderWidth: 2,
     borderColor: colors.aqua,
     textAlign: 'center',
-    fontSize: 25,
-    borderRadius: 8,
-    marginHorizontal: 10,
-    marginVertical: 30,
-    left: 15,
+    borderRadius: 10,
+    color: colors.dark,
+    backgroundColor: colors.lightGray, // Optional for better visibility
+    marginHorizontal: 8, // Spacing between input boxes
   },
+
   submitButton: {
     backgroundColor: colors.primary,
     paddingVertical: 12,

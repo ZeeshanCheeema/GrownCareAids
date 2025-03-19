@@ -1,57 +1,55 @@
-import React, {useState, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Text,
-  TextInput,
   TouchableOpacity,
   StyleSheet,
   Image,
   Dimensions,
   Alert,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {
   useResendOtpMutation,
   useVerifyOtpMutation,
 } from '../../services/Auth/AuthApi';
-import color from '../../utils/color';
-
+import OtpInputs from 'react-native-otp-inputs';
+import colors from '../../utils/color';
 const {width, height} = Dimensions.get('window');
 
-const OTPCode = ({route}) => {
+const OTPCode = () => {
   const navigation = useNavigation();
-  const [otp, setOtp] = useState(['', '', '', '']);
-  const inputRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
-  const [verifyotp] = useVerifyOtpMutation();
-  const [resendOtp, {isLoading}] = useResendOtpMutation();
-  const email = route?.params?.email;
+  const route = useRoute();
+  const email = route.params?.email;
+  const [otp, setOtp] = useState('');
+  const [verifyotp, {isLoading}] = useVerifyOtpMutation();
+  const [resendOtp] = useResendOtpMutation();
 
-  const handleOtpChange = (index, value) => {
-    if (isNaN(value)) return;
-    let newOtp = [...otp];
-    newOtp[index] = value;
-    setOtp(newOtp);
-
-    if (value !== '' && index < 3) {
-      inputRefs[index + 1].current.focus();
+  // Handle OTP updates safely
+  const handleOtpChange = code => {
+    if (code.length <= 4) {
+      setOtp(code);
     }
   };
 
+  useEffect(() => {
+    if (otp.length === 4) {
+      handleOtpSubmit();
+    }
+  }, [otp]);
+
   const handleOtpSubmit = async () => {
-    const otpCode = otp.join('');
-    if (otpCode.length === 4) {
+    if (otp.length === 4) {
       try {
-        await verifyotp({email, otp: otpCode}).unwrap();
-        navigation.navigate('Login');
+        await verifyotp({email, otp}).unwrap();
+        navigation.navigate('NewPassword');
       } catch (err) {
         Alert.alert(
           'Error',
           err?.data?.message || 'OTP verification failed, try again.',
         );
       }
-    } else {
-      Alert.alert('Invalid OTP', 'Please enter a 4-digit OTP');
     }
   };
 
@@ -75,7 +73,7 @@ const OTPCode = ({route}) => {
         <TouchableOpacity
           onPress={() => navigation.goBack()}
           style={styles.backButton}>
-          <Icon name="arrow-back" size={24} color={color.white} />
+          <Icon name="arrow-back" size={24} color={colors.white} />
         </TouchableOpacity>
         <Text style={styles.title}>OTP Verification</Text>
         <Image
@@ -86,33 +84,30 @@ const OTPCode = ({route}) => {
 
       <View style={styles.formContainer}>
         <Text style={styles.otpText}>
-          We sent a verification code to your email. Enter verification code
-          here!
+          We sent a verification code to your email. {email} Enter the code
+          below.
         </Text>
 
         <View style={styles.otpInputContainer}>
-          {otp.map((digit, index) => (
-            <TextInput
-              placeholderTextColor={color.grey}
-              key={index}
-              ref={inputRefs[index]}
-              style={styles.otpInput}
-              maxLength={1}
-              keyboardType="numeric"
-              value={digit}
-              onChangeText={value => handleOtpChange(index, value)}
-            />
-          ))}
+          <OtpInputs
+            handleChange={handleOtpChange}
+            numberOfInputs={4}
+            style={styles.otpInputContainer}
+            inputStyles={styles.input}
+          />
         </View>
 
-        <TouchableOpacity onPress={handleResendOtp} disabled={isLoading}>
-          <Text style={styles.resendText}>
-            {isLoading ? 'Resending...' : 'Resend OTP'}
-          </Text>
+        <TouchableOpacity onPress={handleResendOtp}>
+          <Text style={styles.resendText}>Resend OTP</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.submitButton} onPress={handleOtpSubmit}>
-          <Text style={styles.submitText}>Continue</Text>
+        <TouchableOpacity
+          style={styles.submitButton}
+          onPress={handleOtpSubmit}
+          disabled={isLoading}>
+          <Text style={styles.submitText}>
+            {isLoading ? 'Verifying...' : 'Continue'}
+          </Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -122,10 +117,10 @@ const OTPCode = ({route}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: color.background,
+    backgroundColor: colors.white,
   },
   headerTop: {
-    backgroundColor: color.secondary,
+    backgroundColor: colors.secondary,
     height: height * 0.22,
     borderBottomRightRadius: 20,
     borderBottomLeftRadius: 20,
@@ -143,7 +138,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 25,
     fontWeight: '700',
-    color: color.white,
+    color: colors.white,
     fontFamily: 'PT Serif',
   },
   logo: {
@@ -163,40 +158,44 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: 'center',
     marginBottom: 20,
-    color: color.lightblack,
+    color: colors.lightblack,
   },
   otpInputContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
+    alignItems: 'center',
     marginHorizontal: 30,
     marginBottom: 20,
   },
-  otpInput: {
-    width: 60,
+
+  input: {
+    width: 50,
     height: 60,
-    borderWidth: 1,
-    borderColor: color.aqua,
+    fontSize: 24,
+    borderWidth: 2,
+    borderColor: colors.aqua,
     textAlign: 'center',
-    fontSize: 25,
-    borderRadius: 8,
-    marginHorizontal: 10,
-    marginVertical: 30,
+    borderRadius: 10,
+    color: colors.primary,
+    backgroundColor: colors.lightGray,
+    marginHorizontal: 8,
   },
+
   submitButton: {
-    backgroundColor: color.secondary,
+    backgroundColor: colors.secondary,
     paddingVertical: 12,
     borderRadius: 8,
     width: '100%',
     alignItems: 'center',
-    marginTop: 250,
+    marginTop: 180,
   },
   submitText: {
-    color: color.white,
+    color: colors.white,
     fontSize: 16,
     fontWeight: 'bold',
   },
   resendText: {
-    color: color.secondary,
+    color: colors.secondary,
     fontSize: 14,
     marginTop: 1,
   },

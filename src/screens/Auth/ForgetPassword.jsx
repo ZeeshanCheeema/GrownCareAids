@@ -122,8 +122,8 @@ const styles = StyleSheet.create({
     height: 33,
     resizeMode: 'contain',
     position: 'absolute',
-    bottom: 10,
-    left: 15,
+    bottom: 1,
+    left: 1,
   },
   formContainer: {
     paddingHorizontal: 20,
